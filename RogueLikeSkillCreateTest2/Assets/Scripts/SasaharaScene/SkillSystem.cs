@@ -6,20 +6,39 @@ using UnityEngine;
 
 namespace SkillSystem
 {
+    struct LocationData
+    {
+        Vector3 pos;
+        Quaternion rotate;
+        public void ResetData(Transform tf)
+        {
+            pos = tf.position;
+            rotate = tf.rotation;
+        }
+        public LocationData(Transform tf)
+        {
+            pos = tf.position;
+            rotate = tf.rotation;
+        }
+        public Vector3 GetPos() { return pos; }
+        public Quaternion GetRotate() { return rotate; }
+    }
+
+
     struct SkillElements
     {
-        Transform tf;
+        LocationData ld;
         List<GameObject> targets;
         public SkillElements(Transform t)
         {
-            tf = t;
+            ld = new LocationData(t);
             targets = new List<GameObject>();
         }
-        public Transform GetTransform() { return  tf; }
+        public LocationData GetLocationData() { return ld; }
         public List<GameObject> GetTargets() {  return targets; }
 
         public void AddTargets(GameObject obj) { targets.Add(obj); }
-        public void SetTransform(Transform tf) { this.tf = tf; }
+        public void SetLocationData(Transform tf) { ld.ResetData(tf); }
     }
 
     public class SkillProgress

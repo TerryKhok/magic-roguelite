@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using SkillSystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -12,21 +14,27 @@ public class SkillUser : MonoBehaviour
     {
         List<ISkillProgress> list = new List<ISkillProgress>();
         list.Add(new TargetBall(1));
-        list.Add(new MechanicsDamage(1));
+        list.Add(new MechanicsGenerateCube(1));
         _skillSlot.Add(new List<ISkillProgress>(list));
     }
 
+
     public async void RunSkill(int num)
     {
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
         List<ISkillProgress> code = new List<ISkillProgress>(_skillSlot[num]);
         SkillElements elem = new SkillElements(gameObject.transform);
-        CancellationTokenSource tokenSource = new CancellationTokenSource();
-        CancellationToken token = tokenSource.Token;
 
         foreach (ISkillProgress progress in code)
         {
-            progress.SkillProgressNoWait(elem, token);
-            elem = await progress.SkillProgress(elem, token);
+            try {
+                progress.SkillProgressNoWait(elem, token);
+                elem = await progress.SkillProgress(elem, token);
+                Debug.Log(elem.GetLocationData().GetPos());
+            } catch ( OperationCanceledException e)
+            {
+                Debug.Log(e.ToString() + " / スキル実行中にキャンセル");
+            }
         }
     }
 }

@@ -16,25 +16,30 @@ public class TargetBall : SkillProgress, ISkillProgress
 
     async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
     {
-        GameObject obj = new GameObject("ball", typeof(CircleCollider2D), typeof(Rigidbody2D));
-        obj.GetComponent<CircleCollider2D>().isTrigger = true;
-        obj.GetComponent<Rigidbody2D>().gravityScale = 0.0f;
+        token.ThrowIfCancellationRequested();
 
-        obj.transform.position = elem.GetTransform().position;
-        obj.transform.rotation = elem.GetTransform().rotation;
+        GameObject obj = Object.Instantiate(Resources.Load("ball") as GameObject);
+        obj.transform.position = elem.GetLocationData().GetPos();
+        obj.transform.rotation = elem.GetLocationData().GetRotate();
 
-        obj.GetComponent<Rigidbody2D>().velocity = new Vector2(1, 1);
-        Debug.Log(obj.GetComponent<Rigidbody2D>().velocity + "tsts");
+        obj.GetComponent<Rigidbody2D>().velocity = obj.transform.up * 3;
 
-        Collider2D hit;
-        hit = await obj.GetAsyncTriggerEnter2DTrigger().OnTriggerEnter2DAsync(token);
+        UniTask<Collider2D> task1 = obj.GetAsyncTriggerEnter2DTrigger().OnTriggerEnter2DAsync(token);
+        UniTask task2 = UniTask.Delay(3000);
 
-        if (hit.gameObject.CompareTag("Enemy"))
+        var awaiter = await UniTask.WhenAny(task1, task2);
+
+        if (awaiter.result != null)
         {
-            elem.AddTargets(hit.gameObject);
-        }
-        elem.SetTransform(hit.gameObject.transform);
+            GameObject hit = awaiter.result.gameObject;
 
+            if (hit.gameObject.CompareTag("Enemy"))
+            {
+                elem.AddTargets(hit.gameObject);
+            }
+            elem.SetLocationData(hit.gameObject.transform);
+        }
+        elem.SetLocationData(obj.gameObject.transform);
         Object.Destroy(obj);
 
         return elem;
@@ -42,6 +47,6 @@ public class TargetBall : SkillProgress, ISkillProgress
 
     void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
     {
-
+        token.ThrowIfCancellationRequested();
     }
 }
