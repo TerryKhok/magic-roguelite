@@ -12,7 +12,10 @@ using UnityEditor;
 
 public class TargetBall : SkillProgress, ISkillProgress
 {
-    public TargetBall(int t) : base(t) { Debug.Log("TargetBall Generated"); }
+    public TargetBall(int t) : base(t)
+    {
+        Debug.Log($"[Generated] TargetBall: {t}");
+    }
 
     async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
     {
@@ -25,7 +28,7 @@ public class TargetBall : SkillProgress, ISkillProgress
         obj.GetComponent<Rigidbody2D>().velocity = obj.transform.up * 3;
 
         UniTask<Collider2D> task1 = obj.GetAsyncTriggerEnter2DTrigger().OnTriggerEnter2DAsync(token);
-        UniTask task2 = UniTask.Delay(3000);
+        UniTask task2 = UniTask.Delay(1000);
 
         var awaiter = await UniTask.WhenAny(task1, task2);
 

@@ -12,10 +12,8 @@ public class SkillUser : MonoBehaviour
 
     void Start()
     {
-        List<ISkillProgress> list = new List<ISkillProgress>();
-        list.Add(new TargetBall(1));
-        list.Add(new MechanicsGenerateCube(1));
-        _skillSlot.Add(new List<ISkillProgress>(list));
+        _skillSlot.Add(GetComponent<SkillCompile>().GetSkill());
+        Debug.Log(_skillSlot.Count);
     }
 
 
@@ -24,13 +22,11 @@ public class SkillUser : MonoBehaviour
         CancellationToken token = this.GetCancellationTokenOnDestroy();
         List<ISkillProgress> code = new List<ISkillProgress>(_skillSlot[num]);
         SkillElements elem = new SkillElements(gameObject.transform);
-
         foreach (ISkillProgress progress in code)
         {
             try {
                 progress.SkillProgressNoWait(elem, token);
                 elem = await progress.SkillProgress(elem, token);
-                Debug.Log(elem.GetLocationData().GetPos());
             } catch ( OperationCanceledException e)
             {
                 Debug.Log(e.ToString() + " / スキル実行中にキャンセル");

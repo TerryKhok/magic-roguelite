@@ -9,7 +9,10 @@ using UnityEditor;
 
 public class MechanicsDamage : SkillProgress, ISkillProgress
 {
-    public MechanicsDamage(int t) : base(t) { Debug.Log("MechanicsDamage Generated"); }
+    public MechanicsDamage(int t) : base(t)
+    {
+        Debug.Log($"[Generated] MechanicsDamage: {t}");
+    }
     async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
@@ -26,7 +29,10 @@ public class MechanicsDamage : SkillProgress, ISkillProgress
 
 public class MechanicsGenerateCube : SkillProgress, ISkillProgress
 {
-    public MechanicsGenerateCube(int t) : base(t) { Debug.Log("MechanicsGenerateCube Generated"); }
+    public MechanicsGenerateCube(int t) : base(t)
+    {
+        Debug.Log($"[Generated] MechanicsGenerateCube: {t}");
+    }
 
     async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
     {

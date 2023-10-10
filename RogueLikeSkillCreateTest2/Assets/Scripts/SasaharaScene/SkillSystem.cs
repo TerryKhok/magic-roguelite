@@ -1,12 +1,14 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace SkillSystem
 {
-    struct LocationData
+    public struct LocationData
     {
         Vector3 pos;
         Quaternion rotate;
@@ -14,6 +16,11 @@ namespace SkillSystem
         {
             pos = tf.position;
             rotate = tf.rotation;
+        }
+        public void ResetData(Vector3 pos, Quaternion rotate)
+        {
+            this.pos = pos;
+            this.rotate = rotate;
         }
         public LocationData(Transform tf)
         {
@@ -25,7 +32,7 @@ namespace SkillSystem
     }
 
 
-    struct SkillElements
+    public struct SkillElements
     {
         LocationData ld;
         List<GameObject> targets;
@@ -35,26 +42,45 @@ namespace SkillSystem
             targets = new List<GameObject>();
         }
         public LocationData GetLocationData() { return ld; }
-        public List<GameObject> GetTargets() {  return targets; }
+        public List<GameObject> GetTargets() { return targets; }
 
         public void AddTargets(GameObject obj) { targets.Add(obj); }
         public void SetLocationData(Transform tf) { ld.ResetData(tf); }
+        public void SetLocationData(Vector3 pos, Quaternion rotate) { ld.ResetData(pos, rotate); }
     }
 
     public class SkillProgress
     {
-		int _tier;
-        
-		public int getTier() { return _tier; }
+        int _tier;
+
+        public int getTier() { return _tier; }
         public void setTier(int t) { _tier = t; }
 
-       public SkillProgress(int t) { _tier = t; }
+        public SkillProgress(int t) { _tier = t; }
     }
 
-    interface ISkillProgress
+
+    public interface ISkillProgress
     {
         public UniTask<SkillElements> SkillProgress(SkillElements elem, CancellationToken token);
 
         public void SkillProgressNoWait(SkillElements elem, CancellationToken token);
+    }
+
+    public interface ISkillLoopStartProgress : ISkillProgress
+    {
+        public void AddLoopProgressList(ISkillProgress progress);
+        public Type GetLoopEndProgressType();
+    }
+
+    public enum progressId
+    {
+        TargetBall,
+        MechanicsDamage,
+        MechanicsGenerateCube,
+        SystemLoopStart,
+        SystemLoopEnd,
+        SystemWayStart,
+        SystemWayEnd
     }
 }
