@@ -9,7 +9,7 @@ using UnityEditor;
 
 public class MechanicsDamage : SkillProgress, ISkillProgress
 {
-    public MechanicsDamage(int t) : base(t)
+    public MechanicsDamage(int t) : base(t, new int[] { 10 })
     {
         Debug.Log($"[Generated] MechanicsDamage: {t}");
     }
@@ -22,6 +22,7 @@ public class MechanicsDamage : SkillProgress, ISkillProgress
 
     void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
     {
+        int dmg = GetArgsValue(0);
         token.ThrowIfCancellationRequested();
         elem.GetTargets().ForEach(t => { Object.Destroy(t); });
     }
@@ -29,7 +30,7 @@ public class MechanicsDamage : SkillProgress, ISkillProgress
 
 public class MechanicsGenerateCube : SkillProgress, ISkillProgress
 {
-    public MechanicsGenerateCube(int t) : base(t)
+    public MechanicsGenerateCube(int t) : base(t, new int[] { 2000 })
     {
         Debug.Log($"[Generated] MechanicsGenerateCube: {t}");
     }
@@ -44,9 +45,12 @@ public class MechanicsGenerateCube : SkillProgress, ISkillProgress
     async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        GameObject resource = Resources.Load("OhItsCube") as GameObject;
+
+        int lifeTime = GetArgsValue(0);
+
+        GameObject resource = Resources.Load("SkillSystem_Mechanics_GenerateCube_Stub") as GameObject;
         GameObject cube = Object.Instantiate(resource, elem.GetLocationData().GetPos(), elem.GetLocationData().GetRotate());
-        await UniTask.Delay(2000);
+        await UniTask.Delay(lifeTime);
         Object.Destroy(cube);
     }
 }

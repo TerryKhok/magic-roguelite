@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace SkillSystem
 {
@@ -52,27 +51,38 @@ namespace SkillSystem
     public class SkillProgress
     {
         int _tier;
+        int[] _args = new int[3];
 
-        public int getTier() { return _tier; }
-        public void setTier(int t) { _tier = t; }
+        public int GetTier() { return _tier; }
+        public void GetTier(int t) { _tier = t; }
+        public int[] GetArgs() { return _args; }
+        public int GetArgsValue(int i) { return _args[i]; }
 
-        public SkillProgress(int t) { _tier = t; }
+        public SkillProgress(int t, int[] a)
+        {
+            _tier = t;
+            _args = a;
+        }
     }
 
-
+    //ノード全てに実装するインターフェイス（継承しているインターフェイスで実装しているものもある）
     public interface ISkillProgress
     {
+        //実行時に処理が終わるまで次のノードに待機してもらう処理
         public UniTask<SkillElements> SkillProgress(SkillElements elem, CancellationToken token);
 
+        //実行時に処理を待機せずに次のノードに行く処理
         public void SkillProgressNoWait(SkillElements elem, CancellationToken token);
     }
 
+    //ループ処理が含まれるノードに実装するインターフェイス
     public interface ISkillLoopStartProgress : ISkillProgress
     {
-        public void AddLoopProgressList(ISkillProgress progress);
-        public Type GetLoopEndProgressType();
+        public void AddLoopProgressList(ISkillProgress progress);   //ループ内で実行する処理を追加
+        public Type GetLoopEndProgressType();                       //ループ処理終了ノードの取得用（要設定）
     }
 
+    //IDを列挙。使うのはSkillCompile.csのConvertIdToISkillProgress関数
     public enum progressId
     {
         TargetBall,

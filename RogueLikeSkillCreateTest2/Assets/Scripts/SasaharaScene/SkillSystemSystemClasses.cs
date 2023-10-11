@@ -9,9 +9,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
+//遅延ありループ処理の開始ノード
 public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
 {
-    public SystemLoopStart(int t) : base(t)
+    public SystemLoopStart(int t) : base(t, new int[] { 6, 100 })
     {
         Debug.Log($"[Generated] SystemLoopStart: {t}");
     }
@@ -26,8 +27,8 @@ public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
     async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        int loopTime = 6;
-        int delay = 100;
+        int loopTime = GetArgsValue(0);
+        int delay = GetArgsValue(1);
         for (int i = 0; i < loopTime; i++)
         {
             SkillElements elemPrev = elem;
@@ -63,11 +64,11 @@ public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
     }
 }
 
-
+//遅延ありループ処理の終了ノード
 public class SystemLoopEnd : SkillProgress, ISkillProgress
 {
 
-    public SystemLoopEnd(int t) : base(t)
+    public SystemLoopEnd(int t) : base(t, new int[] { })
     {
         Debug.Log($"[Generated] SystemLoopEnd: {t}");
     }
@@ -86,9 +87,10 @@ public class SystemLoopEnd : SkillProgress, ISkillProgress
 }
 
 
+//複数方向ループ処理の開始ノード
 public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
 {
-    public SystemWayStart(int t) : base(t)
+    public SystemWayStart(int t) : base(t, new int[] { 6, 60 })
     {
         Debug.Log($"[Generated] SystemWayStart: {t}");
     }
@@ -103,8 +105,10 @@ public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
     async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        int angleBetween = 60;
-        int way = 6;
+
+        int way = GetArgsValue(0);
+        int angleBetween = GetArgsValue(1);
+
         for (int i = 0; i < way; i++)
         {
             SkillElements elemPrev = elem;
@@ -143,9 +147,10 @@ public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
     }
 }
 
+//複数方向ループ処理の終了ノード
 public class SystemWayEnd : SkillProgress, ISkillProgress
 {
-    public SystemWayEnd(int t) : base(t)
+    public SystemWayEnd(int t) : base(t, new int[] { })
     {
         Debug.Log($"[Generated] SystemWayEnd: {t}");
     }

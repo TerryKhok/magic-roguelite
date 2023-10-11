@@ -2,8 +2,6 @@ using SkillSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using TMPro;
 using UnityEngine;
 
 
@@ -12,13 +10,9 @@ public class SkillCompile : MonoBehaviour
 {
     [SerializeField] List<progressId> _progressIdList = new List<progressId>();
 
-    void Start()
+    public List<ISkillProgress> GetSkill()
     {
-
-    }
-
-    public List<ISkillProgress> GetSkill() { 
-        return Compile(); 
+        return Compile();
     }
 
 
@@ -29,7 +23,7 @@ public class SkillCompile : MonoBehaviour
         List<ISkillProgress> surplus = new List<ISkillProgress>();  //ループ処理で使うリスト
         foreach (var id in _progressIdList)
         {       //progressId型のリストをISkillProgress型のリストへ
-            surplus.Add(ConvertIdToISkillProgress(id.ToString()));
+            surplus.Add(ConvertIdToISkillProgress(id));
         }
 
         do
@@ -88,23 +82,23 @@ public class SkillCompile : MonoBehaviour
         return result;
     }
 
-    public ISkillProgress ConvertIdToISkillProgress(string id) //string型のidを渡すとISkillProgressのインスタンスで返してくれる
+    public ISkillProgress ConvertIdToISkillProgress(progressId id) //string型のidを渡すとISkillProgressのインスタンスで返してくれる
     {
         switch (id)
         {
-            case "TargetBall":
+            case progressId.TargetBall:
                 return new TargetBall(1);
-            case "MechanicsDamage":
+            case progressId.MechanicsDamage:
                 return new MechanicsDamage(1);
-            case "MechanicsGenerateCube":
+            case progressId.MechanicsGenerateCube:
                 return new MechanicsGenerateCube(1);
-            case "SystemLoopStart":
+            case progressId.SystemLoopStart:
                 return new SystemLoopStart(1);
-            case "SystemLoopEnd":
+            case progressId.SystemLoopEnd:
                 return new SystemLoopEnd(1);
-            case "SystemWayStart":
+            case progressId.SystemWayStart:
                 return new SystemWayStart(1);
-            case "SystemWayEnd":
+            case progressId.SystemWayEnd:
                 return new SystemWayEnd(1);
         }
         return null;
