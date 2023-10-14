@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3764575980181452605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3764575980181452603}
+  - component: {fileID: 3764575980181452602}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3764575980181452603
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764575980181452605}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3764575980181452602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764575980181452605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4157548f64a67429bd9174e9508c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SEMixerGroup: {fileID: 8669583757065817783, guid: 958f9ad210085c04480330b4a3892b0d, type: 2}
+  musicMixerGroup: {fileID: -2817049667711433278, guid: 958f9ad210085c04480330b4a3892b0d, type: 2}
+  sounds:
+  - audioType: 0
+    name: ButtonPressed
+    clip: {fileID: 8300000, guid: e829ba7bdc259dc4ebeacf4468e018e0, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 1
+    name: BGM1
+    clip: {fileID: 8300000, guid: 65331ac5b63a35743a66d1f44c1c43d3, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    src: {fileID: 0}
+  - audioType: 0
+    name: Attack01
+    clip: {fileID: 8300000, guid: 1b7ea75cc8538394aab0e5a1f132d10c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: Attack02
+    clip: {fileID: 8300000, guid: 41b572e1cd5e8b7459a696e21c6fe9ae, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: Attack03
+    clip: {fileID: 8300000, guid: 61850f22dd83dcf41ab672be427faa97, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: TakeDamage01
+    clip: {fileID: 8300000, guid: f5089d1531296914282e2968a12077de, type: 3}
+    volume: 0.9
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: TakeDamage02
+    clip: {fileID: 8300000, guid: e44d352c0743a464aa1b1e8eacfb42e4, type: 3}
+    volume: 0.9
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: SkillCharged
+    clip: {fileID: 8300000, guid: 3ffda20c672e8f049a69994a00d68567, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: SkillUsed
+    clip: {fileID: 8300000, guid: 2b45416f8e5f40a4aa42cc81f27db46c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: Select
+    clip: {fileID: 8300000, guid: 2a6dcf2b6a16d0b4f8cc0c57fcfe4f04, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: Deselect
+    clip: {fileID: 8300000, guid: 77ad3818c1280c940b20f0a80c03d327, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: Death
+    clip: {fileID: 8300000, guid: 6746ed6c74a35484f9e013230176939e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 0
+    name: Victory
+    clip: {fileID: 8300000, guid: 9a43d775b00fec9439fb185c22aae548, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    src: {fileID: 0}
+  - audioType: 1
+    name: BGM2
+    clip: {fileID: 8300000, guid: 6e382d872baea1e48b0520fd3004c928, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    src: {fileID: 0}
