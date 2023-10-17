@@ -2124,12 +2124,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592c923c594fb9d418264da9eece3f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  g_pointy: 5
-  g_pointx: 5
-  _room: 9
+  g_pointy: 4
+  g_pointx: 4
+  _room: 14
+  _roommin: 13
   g_playerdir: 0
-  g_nowpositionx: 5
-  g_nowpositiony: 5
+  g_nowpositionx: 4
+  g_nowpositiony: 4
   g_nowfloor: 0
 --- !u!1 &1810914613
 GameObject:
