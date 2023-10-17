@@ -2126,8 +2126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   g_pointy: 4
   g_pointx: 4
-  _room: 14
-  _roommin: 13
+  _room: 15
+  _roommin: 10
   g_playerdir: 0
   g_nowpositionx: 4
   g_nowpositiony: 4
