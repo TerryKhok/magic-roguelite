@@ -48,7 +48,7 @@ public class MechanicsGenerateCube : SkillProgress, ISkillProgress
 
         int lifeTime = GetArgsValue(0);
 
-        GameObject resource = Resources.Load("SkillSystem_Mechanics_GenerateCube_Stub") as GameObject;
+        GameObject resource = Resources.Load("SkillSystem/SkillSystem_Mechanics_GenerateCube_Stub") as GameObject;
         GameObject cube = Object.Instantiate(resource, elem.GetLocationData().GetPos(), elem.GetLocationData().GetRotate());
         await UniTask.Delay(lifeTime);
         Object.Destroy(cube);

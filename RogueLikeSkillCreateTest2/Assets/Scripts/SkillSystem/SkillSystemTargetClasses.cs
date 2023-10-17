@@ -24,7 +24,7 @@ public class TargetBall : SkillProgress, ISkillProgress
         int speed = GetArgsValue(0);
         int lifeTime = GetArgsValue(1);
 
-        GameObject obj = Object.Instantiate(Resources.Load("SkillSystem_Target_Ball_Stub") as GameObject);
+        GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Target_Ball_Stub") as GameObject);
         obj.transform.position = elem.GetLocationData().GetPos();
         obj.transform.rotation = elem.GetLocationData().GetRotate();
 
