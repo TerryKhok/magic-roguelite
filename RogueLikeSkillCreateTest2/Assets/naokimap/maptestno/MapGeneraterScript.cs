@@ -20,15 +20,20 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     const int pointleft = 4;//右方向
 
     int _pointdir = 0;//マップを生成する方向
-    public int g_pointy = 5;//マップ生成の現在位置Ｙ
-    public int g_pointx = 5;//マップ生成の現在位置Ｘ
+    public int g_pointy = 4;//マップ生成の現在位置Ｙ
+    public int g_pointx = 4;//マップ生成の現在位置Ｘ
     [SerializeField]
-    int _room = 10;//生成する部屋の数
+    int _room = 15;//生成する部屋の最大数
+    [SerializeField]
+    int _roommin = 8;//生成する部屋の最小数
+
+    int _trueroom = 0;
+
     public int g_playerdir;//部屋をまたいだプレイヤーの方向
     public int[,] g_field = new int[fieldy, fieldx];//フィールドの初期化
 
-    public int g_nowpositionx = 5;//今のプレイヤーのポジションX
-    public int g_nowpositiony = 5;//今のプレイヤーのポジションY
+    public int g_nowpositionx = 4;//今のプレイヤーのポジションX
+    public int g_nowpositiony = 4;//今のプレイヤーのポジションY
 
     public int g_nowfloor = 0;//現在の階層
 
@@ -93,10 +98,11 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     public void Init()//更新処理
     {
         g_nowfloor += 1;    ///
-        g_nowpositionx = 5; //
-        g_nowpositiony = 5; //更新時に初期化する
-        g_pointx = 5;　　　 //
-        g_pointy = 5;       ///
+        g_nowpositionx = 4; //
+        g_nowpositiony = 4; //更新時に初期化する
+        g_pointx = 4;　　　 //
+        g_pointy = 4;       ///
+        _trueroom = 0;
         for (int i = 0; i < fieldy; i++)
         {
             for (int j = 0; j < fieldx; j++)
@@ -108,8 +114,8 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
         {
             if(i % (_room / 2) == 0)                                                                                   //部屋の生成が二分の一おわったら
             {
-                g_pointx = 5;                                                                                          //初期生成位置を初期化する
-                g_pointy = 5;
+                g_pointx = 4;                                                                                          //初期生成位置を初期化する
+                g_pointy = 4;
             }
             _pointdir = UnityEngine.Random.Range(pointup, pointleft + 1);　　　　　　　　　　　　　　　　　　　　　　  //マップの生成ポイントが移動する向きを決定
             switch (_pointdir)
@@ -122,6 +128,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                             g_field[g_pointy - 1, g_pointx] = 1;　　　　　　　　　　　　　　　　　　　　　　　　　　　 //道を生成
                             g_field[g_pointy - 2, g_pointx] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);//ランダムに部屋を生成
                             g_pointy -= 2;　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//生成ポイントを一部屋分上にずらす
+                            _trueroom += 1;
                         }
                         else if (g_field[g_pointy - 1, g_pointx] == 0)
                         {
@@ -132,7 +139,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                         else                                                                 
                         {
                             g_pointy -= 2;                                                                          //ただし次の部屋には進む
-                            i--;　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　                        //そうじゃなかったときルームの数をキープする
+                            //i--;　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　                        //そうじゃなかったときルームの数をキープする
                         }
                     }
   //                  else
@@ -147,6 +154,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                         {
                             g_field[g_pointy, g_pointx + 1] = 2;
                             g_field[g_pointy, g_pointx + 2] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            _trueroom += 1;
                             g_pointx += 2;
                         }
                         else if (g_field[g_pointy, g_pointx + 1] == 0)
@@ -158,7 +166,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                         else
                         {
                             g_pointx += 2;
-                            i--;
+                            //i--;
                         }
                     }
  //                   else
@@ -173,18 +181,19 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                         {
                             g_field[g_pointy + 1, g_pointx] = 1;
                             g_field[g_pointy + 2, g_pointx] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            _trueroom+= 1;
                             g_pointy += 2;
                         }
                         else if (g_field[g_pointy + 1, g_pointx] == 0)
                         {
-                            g_field[g_pointy + 1 , g_pointx] = 1;
+                            g_field[g_pointy + 1, g_pointx] = 1;
                             g_pointy += 2;
                             i--;
                         }
                         else
                         {
                             g_pointy += 2;
-                            i--;
+                            //i--;
                         }
                     }
 //                    else
@@ -199,6 +208,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                         {
                             g_field[g_pointy, g_pointx - 1] = 2;
                             g_field[g_pointy, g_pointx - 2] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            _trueroom += 1; ;
                             g_pointx -= 2;
                         }
                         else if (g_field[g_pointy, g_pointx - 1] == 0)
@@ -210,7 +220,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                         else
                         {
                             g_pointx -= 2;
-                            i--;
+                            //i--;
                         }
                     }
 //                    else
@@ -218,6 +228,46 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
 //                        i--;
 //                    }
                     break;
+            }
+        }
+        if(_trueroom < _roommin)//無限ループが発覚したので例外処理　見ないで！！！
+        {
+            Debug.Log("dksfdsodjkdjdskjklj");
+            for (int j = 1; j < fieldy / 2; j++) {
+                for (int k = 1; k < fieldx / 2; k++){
+                    if (j > 0 && j < fieldy / 2 - 1 && k > 0 && k < fieldx / 2 - 1)
+                    {
+                        if (g_field[j * 2, k * 2] == 0 && g_field[j * 2 + 2, k * 2] >= 10)
+                        {
+                            g_field[j * 2, k * 2] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            g_field[j * 2 + 1, k * 2] = 1;
+                            _trueroom++;
+                        }
+                        else if (g_field[j * 2, k * 2] == 0 && g_field[j * 2, k * 2 + 2] >= 10)
+                        {
+                            g_field[j * 2, k * 2] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            g_field[j * 2, k * 2 + 1] = 2;
+                            _trueroom++;
+                        }
+                        else if (g_field[j * 2, k * 2] == 0 && g_field[j * 2 - 2, k * 2] >= 10)
+                        {
+                            g_field[j * 2, k * 2] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            g_field[j * 2 - 1, k * 2] = 1;
+                            _trueroom++;
+                        }
+                        else if (g_field[j * 2, k * 2] == 0 && g_field[j * 2, k * 2 - 2] >= 10)
+                        {
+                            g_field[j * 2, k * 2] = UnityEngine.Random.Range(g_nowfloor * 10, 10 + g_nowfloor * 10);
+                            g_field[j * 2, k * 2 - 1] = 2;
+                            _trueroom++;
+                        }
+                        if (_trueroom == _roommin)
+                        {
+                            k = fieldx;
+                            j = fieldy;
+                        }
+                    }
+                }
             }
         }
         g_field[g_nowpositiony, g_nowpositionx] = 1000 * g_nowfloor;//プレイヤーが生成される初期位置のナンバーを入力
