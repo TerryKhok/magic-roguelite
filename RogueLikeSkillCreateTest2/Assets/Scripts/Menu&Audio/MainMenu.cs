@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
         FindObjectOfType<AudioManager>().Play("ButtonPressed");
         FindObjectOfType<AudioManager>().Stop("BGM1");
         FindObjectOfType<AudioManager>().Play("BGM2");
-        SceneManager.LoadScene("SkillCreate");
+        SceneManager.LoadScene("Stage1000");
     }
     public void Option()
     {
