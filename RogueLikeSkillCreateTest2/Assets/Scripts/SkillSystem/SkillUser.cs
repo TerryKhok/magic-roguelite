@@ -13,7 +13,7 @@ public class SkillUser : MonoBehaviour
     void Start()
     {
         _skillSlot.Add(GetComponent<SkillCompile>().GetSkill());
-        Debug.Log(_skillSlot.Count);
+        SkillDB.Initialize();
     }
 
 
@@ -24,10 +24,12 @@ public class SkillUser : MonoBehaviour
         SkillElements elem = new SkillElements(gameObject.transform);
         foreach (ISkillProgress progress in code)
         {
-            try {
+            try
+            {
                 progress.SkillProgressNoWait(elem, token);
                 elem = await progress.SkillProgress(elem, token);
-            } catch ( OperationCanceledException e)
+            }
+            catch (OperationCanceledException e)
             {
                 Debug.Log(e.ToString() + " / スキル実行中にキャンセル");
             }

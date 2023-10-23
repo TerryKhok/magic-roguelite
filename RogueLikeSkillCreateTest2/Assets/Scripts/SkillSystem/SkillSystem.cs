@@ -2,6 +2,8 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -51,17 +53,17 @@ namespace SkillSystem
     public class SkillProgress
     {
         int _tier;
-        int[] _args = new int[3];
+        //int[] _args;
 
         public int GetTier() { return _tier; }
         public void GetTier(int t) { _tier = t; }
-        public int[] GetArgs() { return _args; }
-        public int GetArgsValue(int i) { return _args[i]; }
+        //public int[] GetArgs() { return _args; }
+        //public int GetArgsValue(int i) { return _args[i]; }
 
-        public SkillProgress(int t, int[] a)
+        public SkillProgress(int t)
         {
             _tier = t;
-            _args = a;
+            //_args = new int[5];
         }
     }
 
@@ -83,8 +85,9 @@ namespace SkillSystem
     }
 
     //IDを列挙。使うのはSkillCompile.csのConvertIdToISkillProgress関数
-    public enum progressId
+    public enum ProgressId
     {
+        None,
         TargetBall,
         MechanicsDamage,
         MechanicsGenerateCube,
@@ -92,5 +95,87 @@ namespace SkillSystem
         SystemLoopEnd,
         SystemWayStart,
         SystemWayEnd
+    }
+
+    public struct SkillVariable
+    {
+        public string name;
+        public int[] values;
+    }
+
+
+    public static class SkillDB
+    {
+        public static Dictionary<ProgressId, List<SkillVariable>> g_SkillVariableMap = new Dictionary<ProgressId, List<SkillVariable>>();
+
+        public static void Initialize()
+        {
+            TextAsset resource = Resources.Load("SkillSystem/SkillSystem_Variables") as TextAsset;  //csvをロード
+            StringReader reader = new StringReader(resource.text);  //1行ずつ読み込む
+            while (reader.Peek() != -1) //まだ行が読めるなら
+            {
+                ProgressId id = default;    //マップのKey用
+                List<SkillVariable> list = new List<SkillVariable>(); //マップのValue用
+                SkillVariable v = new SkillVariable();
+                foreach (var str in reader.ReadLine().Split(',', StringSplitOptions.RemoveEmptyEntries))    //何もないやつをスルーして,ごとの区切りでループ
+                    if (id == default)
+                    {
+                        try
+                        {
+                            id = (ProgressId)Enum.Parse(typeof(ProgressId), str);   //行のはじめをProgressIdに変換
+                        }
+                        catch
+                        {
+                            Debug.Log("存在しない処理ノードIDです / " + str);       //変換できないならログ出して次の行
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (v.name == default)
+                        {
+                            v.name = str;
+                        }
+                        else
+                        {
+                            v.values = str.Split("|").Select(int.Parse).ToArray();
+                            list.Add(v);
+                            v = new SkillVariable();
+                        }
+                    }
+                if (id != default)
+                    g_SkillVariableMap.Add(id, list);
+            }
+        }
+
+        public static string GetSkillVariableName(ProgressId id, int idx)
+        {
+            string result;
+            try
+            {
+                result = g_SkillVariableMap.GetValueOrDefault(id)[idx].name;
+            }
+            catch
+            {
+                Debug.Log("DBに値が設定されていません");
+                throw;
+            }
+            return result;
+        }
+
+        public static int GetSkillVariableValue(ProgressId id, int idx, int tier)
+        {
+            int result;
+            try
+            {
+                result = g_SkillVariableMap.GetValueOrDefault(id)[idx].values[tier];
+            }
+            catch
+            {
+                Debug.Log("DBに値が設定されていません");
+                throw;
+            }
+            return result;
+        }
     }
 }

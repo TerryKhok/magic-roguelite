@@ -12,7 +12,7 @@ using UnityEditor;
 
 public class TargetBall : SkillProgress, ISkillProgress
 {
-    public TargetBall(int t) : base(t, new int[] { 3, 1000 })
+    public TargetBall(int t) : base(t)
     {
         Debug.Log($"[Generated] TargetBall: {t}");
     }
@@ -21,8 +21,9 @@ public class TargetBall : SkillProgress, ISkillProgress
     {
         token.ThrowIfCancellationRequested();
 
-        int speed = GetArgsValue(0);
-        int lifeTime = GetArgsValue(1);
+        ProgressId id = ProgressId.TargetBall;
+        int speed = SkillDB.GetSkillVariableValue(id, 0, GetTier());
+        int lifeTime = SkillDB.GetSkillVariableValue(id, 1, GetTier());
 
         GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Target_Ball_Stub") as GameObject);
         obj.transform.position = elem.GetLocationData().GetPos();

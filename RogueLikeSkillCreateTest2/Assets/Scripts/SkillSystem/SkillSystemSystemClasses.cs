@@ -1,18 +1,16 @@
 using Cysharp.Threading.Tasks;
-using Mono.Cecil.Cil;
 using SkillSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
 //遅延ありループ処理の開始ノード
 public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
 {
-    public SystemLoopStart(int t) : base(t, new int[] { 6, 100 })
+    public SystemLoopStart(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemLoopStart: {t}");
     }
@@ -27,8 +25,9 @@ public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
     async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        int loopTime = GetArgsValue(0);
-        int delay = GetArgsValue(1);
+        ProgressId id = ProgressId.SystemLoopStart;
+        int loopTime = SkillDB.GetSkillVariableValue(id, 0, GetTier());
+        int delay = SkillDB.GetSkillVariableValue(id, 1, GetTier());
         for (int i = 0; i < loopTime; i++)
         {
             SkillElements elemPrev = elem;
@@ -68,7 +67,7 @@ public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
 public class SystemLoopEnd : SkillProgress, ISkillProgress
 {
 
-    public SystemLoopEnd(int t) : base(t, new int[] { })
+    public SystemLoopEnd(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemLoopEnd: {t}");
     }
@@ -90,7 +89,7 @@ public class SystemLoopEnd : SkillProgress, ISkillProgress
 //複数方向ループ処理の開始ノード
 public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
 {
-    public SystemWayStart(int t) : base(t, new int[] { 6, 60 })
+    public SystemWayStart(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemWayStart: {t}");
     }
@@ -106,8 +105,9 @@ public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
     {
         token.ThrowIfCancellationRequested();
 
-        int way = GetArgsValue(0);
-        int angleBetween = GetArgsValue(1);
+        ProgressId id = ProgressId.SystemWayStart;
+        int way = SkillDB.GetSkillVariableValue(id, 0, GetTier());
+        int angleBetween = SkillDB.GetSkillVariableValue(id, 1, GetTier());
 
         for (int i = 0; i < way; i++)
         {
@@ -150,7 +150,7 @@ public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
 //複数方向ループ処理の終了ノード
 public class SystemWayEnd : SkillProgress, ISkillProgress
 {
-    public SystemWayEnd(int t) : base(t, new int[] { })
+    public SystemWayEnd(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemWayEnd: {t}");
     }
