@@ -26,10 +26,11 @@ public class TargetBall : SkillProgress, ISkillProgress
         int lifeTime = SkillDB.GetSkillVariableValue(id, 1, GetTier());
 
         GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Target_Ball_Stub") as GameObject);
-        obj.transform.position = elem.GetLocationData().GetPos();
-        obj.transform.rotation = elem.GetLocationData().GetRotate();
+        Transform objtf = obj.transform;
+        objtf.position = elem.GetLocationData().GetPos();
+        objtf.rotation = elem.GetLocationData().GetRotate();
 
-        obj.GetComponent<Rigidbody2D>().velocity = obj.transform.up * speed;
+        obj.GetComponent<Rigidbody2D>().velocity = objtf.up * speed;
 
         UniTask<Collider2D> task1 = obj.GetAsyncTriggerEnter2DTrigger().OnTriggerEnter2DAsync(token);
         UniTask task2 = UniTask.Delay(lifeTime);

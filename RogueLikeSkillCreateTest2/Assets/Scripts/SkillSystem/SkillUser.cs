@@ -12,10 +12,9 @@ public class SkillUser : MonoBehaviour
 
     void Start()
     {
-        _skillSlot.Add(GetComponent<SkillCompile>().GetSkill());
         SkillDB.Initialize();
+        _skillSlot.Add(GetComponent<SkillCompile>().GetSkill());
     }
-
 
     public async void RunSkill(int num)
     {
