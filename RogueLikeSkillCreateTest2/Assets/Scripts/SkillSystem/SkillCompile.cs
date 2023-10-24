@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class SkillCompile : MonoBehaviour
 {
-    [SerializeField] List<progressId> _progressIdList = new List<progressId>();
+    [SerializeField] List<ProgressId> _progressIdList = new List<ProgressId>();
 
     public List<ISkillProgress> GetSkill()
     {
@@ -82,23 +82,23 @@ public class SkillCompile : MonoBehaviour
         return result;
     }
 
-    public ISkillProgress ConvertIdToISkillProgress(progressId id) //string型のidを渡すとISkillProgressのインスタンスで返してくれる
+    public ISkillProgress ConvertIdToISkillProgress(ProgressId id) //string型のidを渡すとISkillProgressのインスタンスで返してくれる
     {
         switch (id)
         {
-            case progressId.TargetBall:
+            case ProgressId.TargetBall:
                 return new TargetBall(1);
-            case progressId.MechanicsDamage:
+            case ProgressId.MechanicsDamage:
                 return new MechanicsDamage(1);
-            case progressId.MechanicsGenerateCube:
+            case ProgressId.MechanicsGenerateCube:
                 return new MechanicsGenerateCube(1);
-            case progressId.SystemLoopStart:
+            case ProgressId.SystemLoopStart:
                 return new SystemLoopStart(1);
-            case progressId.SystemLoopEnd:
+            case ProgressId.SystemLoopEnd:
                 return new SystemLoopEnd(1);
-            case progressId.SystemWayStart:
+            case ProgressId.SystemWayStart:
                 return new SystemWayStart(1);
-            case progressId.SystemWayEnd:
+            case ProgressId.SystemWayEnd:
                 return new SystemWayEnd(1);
         }
         return null;

@@ -12,7 +12,7 @@ using UnityEditor;
 
 public class TargetBall : SkillProgress, ISkillProgress
 {
-    public TargetBall(int t) : base(t, new int[] { 3, 1000 })
+    public TargetBall(int t) : base(t)
     {
         Debug.Log($"[Generated] TargetBall: {t}");
     }
@@ -21,14 +21,16 @@ public class TargetBall : SkillProgress, ISkillProgress
     {
         token.ThrowIfCancellationRequested();
 
-        int speed = GetArgsValue(0);
-        int lifeTime = GetArgsValue(1);
+        ProgressId id = ProgressId.TargetBall;
+        int speed = SkillDB.GetSkillVariableValue(id, 0, GetTier());
+        int lifeTime = SkillDB.GetSkillVariableValue(id, 1, GetTier());
 
         GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Target_Ball_Stub") as GameObject);
-        obj.transform.position = elem.GetLocationData().GetPos();
-        obj.transform.rotation = elem.GetLocationData().GetRotate();
+        Transform objtf = obj.transform;
+        objtf.position = elem.GetLocationData().GetPos();
+        objtf.rotation = elem.GetLocationData().GetRotate();
 
-        obj.GetComponent<Rigidbody2D>().velocity = obj.transform.up * speed;
+        obj.GetComponent<Rigidbody2D>().velocity = objtf.up * speed;
 
         UniTask<Collider2D> task1 = obj.GetAsyncTriggerEnter2DTrigger().OnTriggerEnter2DAsync(token);
         UniTask task2 = UniTask.Delay(lifeTime);

@@ -12,10 +12,9 @@ public class SkillUser : MonoBehaviour
 
     void Start()
     {
+        SkillDB.Initialize();
         _skillSlot.Add(GetComponent<SkillCompile>().GetSkill());
-        Debug.Log(_skillSlot.Count);
     }
-
 
     public async void RunSkill(int num)
     {
@@ -24,10 +23,12 @@ public class SkillUser : MonoBehaviour
         SkillElements elem = new SkillElements(gameObject.transform);
         foreach (ISkillProgress progress in code)
         {
-            try {
+            try
+            {
                 progress.SkillProgressNoWait(elem, token);
                 elem = await progress.SkillProgress(elem, token);
-            } catch ( OperationCanceledException e)
+            }
+            catch (OperationCanceledException e)
             {
                 Debug.Log(e.ToString() + " / スキル実行中にキャンセル");
             }
