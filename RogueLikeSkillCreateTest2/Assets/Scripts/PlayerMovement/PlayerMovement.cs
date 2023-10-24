@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb = null;
     [SerializeField] private float _Speed = 1.0f;
     [SerializeField] private float _roatation_speed = 100.0f;
-    private Vector3 latestPos;
 
     private void Start()
     {
@@ -62,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey("a"))
         { // aキーを押し続けていたら
           // 代入したPositionに対して加算減算を行う
-           _xSpeed = -_Speed;
+            _xSpeed = -_Speed;
         }
         else if (Input.GetKey("d"))
         { // 右キーを押し続けていたら
@@ -80,16 +79,15 @@ public class PlayerMovement : MonoBehaviour
             _ySpeed = -_Speed;
         }
         rb.velocity = new Vector2(_xSpeed, _ySpeed);
-        Debug.Log(_xSpeed);
-        Debug.Log(_ySpeed);
 
 
-        Vector2 movementDirection = new Vector2(_xSpeed,_ySpeed);
-        if(movementDirection != Vector2.zero)
+        Vector2 movementDirection = new Vector2(_xSpeed, _ySpeed);
+        if (movementDirection != Vector2.zero)
         {
             Quaternion torotation = Quaternion.LookRotation(Vector3.forward, movementDirection);
+            Debug.Log(torotation);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, torotation, _roatation_speed * Time.deltaTime);
         }
-       
+
     }
 }

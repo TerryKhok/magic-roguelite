@@ -243,7 +243,6 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
         }
         if(_trueroom < _roommin)//無限ループが発覚したので例外処理　見ないで！！！
         {
-            Debug.Log("dksfdsodjkdjdskjklj");
             for (int j = 1; j < fieldy / 2; j++) {
                 for (int k = 1; k < fieldx / 2; k++){
                     if (j > 0 && j < fieldy / 2 - 1 && k > 0 && k < fieldx / 2 - 1)
