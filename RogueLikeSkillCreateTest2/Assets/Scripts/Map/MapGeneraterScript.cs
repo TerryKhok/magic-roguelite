@@ -10,6 +10,7 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスクリプト
 {
+    #region　変数
     public static MapGeneraterScript Instance;
     const int fieldy = 12;//フィールドの大きさＹ
     const int fieldx = 12;//フィールドの大きさＸ
@@ -36,14 +37,16 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     public int g_nowpositiony = 4;//今のプレイヤーのポジションY
 
     public int g_nowfloor = 0;//現在の階層
+    #endregion
 
+    #region 型定義
     GameObject roadvar;//縦の道のプレハブ
     GameObject roadsid;//横の道のプレハブ
     GameObject froom;//部屋のプレハブ
     GameObject Player;//プレイヤーのプレハブ
     GameObject stairs;//階段のプレハブ
 
-    GameObject NewPlayer;//プレイヤー本体
+    GameObject NewPlayer;//imageプレイヤー本体
 
     RectTransform rectTransform;//Canvas依存のトランスフォーム
 
@@ -51,7 +54,11 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     UpRoadScript uproadsc;
     DownRoadScript downroadsc;
     LeftRoadScript leftroadsc;
-    GameObject TObj;
+    GameObject TObj;//使いまわす用ゲームOBJ
+    GameObject mainchar;//プレイヤーの本体
+    #endregion
+
+    #region Unity依存関数
     public void Awake()
     {
         // シングルトンの呪文
@@ -69,17 +76,20 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();//レクトトランスフォームのコンポーネントを取得
-        roadvar = (GameObject)Resources.Load("roadvar");//縦の道のプレハブを取得
-        roadsid = (GameObject)Resources.Load("roadsid");//横の道のプレハブを取得
-        froom = (GameObject)Resources.Load("froom");//部屋のプレハブを取得
-        Player = (GameObject)Resources.Load("Player");//プレイヤーのプレハブを取得
-        stairs = (GameObject)Resources.Load("Stairs");//階段のプレハブを取得
+        roadvar = (GameObject)Resources.Load("MapResource/roadvar");//縦の道のプレハブを取得
+        roadsid = (GameObject)Resources.Load("MapResource/roadsid");//横の道のプレハブを取得
+        froom = (GameObject)Resources.Load("MapResource/froom");//部屋のプレハブを取得
+        Player = (GameObject)Resources.Load("MapResource/Player");//プレイヤーのプレハブを取得
+        stairs = (GameObject)Resources.Load("MapResource/Stairs");//階段のプレハブを取得
+        mainchar = TObj = GameObject.Find("PlayerMoveR (1)");//メインキャラを取得
         SceneManager.sceneLoaded += OnSceneLoaded;
         Init();//更新処理
         Draw();//描画処理
         NewRoom();
     }
+    #endregion
 
+    #region　自作関数
     public void NewRoom()
     {
         TObj = GameObject.Find("UpRoadTrigger");
@@ -97,6 +107,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     }
     public void Init()//更新処理
     {
+        #region 迷走したアルゴリズム
         g_nowfloor += 1;    ///
         g_nowpositionx = 4; //
         g_nowpositiony = 4; //更新時に初期化する
@@ -270,6 +281,7 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                 }
             }
         }
+        #endregion
         g_field[g_nowpositiony, g_nowpositionx] = 1000 * g_nowfloor;//プレイヤーが生成される初期位置のナンバーを入力
     }
 
@@ -288,18 +300,18 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                     case 0:
                         break;
                     case 1:
-                        Instantiate(roadvar, new Vector2(this.rectTransform.anchoredPosition.x + (j * 30), this.rectTransform.anchoredPosition.y + (i * 30)), Quaternion.identity, this.transform);
+                        Instantiate(roadvar, new Vector2(this.rectTransform.anchoredPosition.x + (j * 20), this.rectTransform.anchoredPosition.y + (i * 20)), Quaternion.identity, this.transform);
                         break;
                     case 2:
-                        Instantiate(roadsid, new Vector2(this.rectTransform.anchoredPosition.x + (j * 30), this.rectTransform.anchoredPosition.y + (i * 30)), Quaternion.identity, this.transform);
+                        Instantiate(roadsid, new Vector2(this.rectTransform.anchoredPosition.x + (j * 20), this.rectTransform.anchoredPosition.y + (i * 20)), Quaternion.identity, this.transform);
                         break;
                     default:
-                        Instantiate(froom, new Vector2(this.rectTransform.anchoredPosition.x + (j * 30), this.rectTransform.anchoredPosition.y + (i * 30)), Quaternion.identity, this.transform);
+                        Instantiate(froom, new Vector2(this.rectTransform.anchoredPosition.x + (j * 20), this.rectTransform.anchoredPosition.y + (i * 20)), Quaternion.identity, this.transform);
                         break;
                 }
             }
         }
-        NewPlayer = Instantiate(Player, new Vector2(this.rectTransform.anchoredPosition.x + (g_nowpositionx * 30), this.rectTransform.anchoredPosition.y + (g_nowpositiony * 30)), Quaternion.identity, this.transform);//プレイヤープレハブをミニマップ上で生成する
+        NewPlayer = Instantiate(Player, new Vector2(this.rectTransform.anchoredPosition.x + (g_nowpositionx * 20), this.rectTransform.anchoredPosition.y + (g_nowpositiony * 20)), Quaternion.identity, this.transform);//プレイヤープレハブをミニマップ上で生成する
     }
 
     public void RoomMet(int Dir)//新しい部屋に進む処理
@@ -342,13 +354,39 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
                 break;
         }
         Destroy(NewPlayer);//プレイヤーのプレハブを壊す
-        NewPlayer = Instantiate(Player, new Vector2(this.rectTransform.anchoredPosition.x + (g_nowpositionx * 30), this.rectTransform.anchoredPosition.y + (g_nowpositiony * 30)), Quaternion.identity, this.transform);//新しく移動後のプレイヤーを生成する
+        NewPlayer = Instantiate(Player, new Vector2(this.rectTransform.anchoredPosition.x + (g_nowpositionx * 20), this.rectTransform.anchoredPosition.y + (g_nowpositiony * 20)), Quaternion.identity, this.transform);//新しく移動後のプレイヤーを生成する
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)//シーンがロードされたとき
     {
+        switch (g_playerdir)
+        {//プレイヤーがシーンをまたいだ時の向きによって生成位置を変える
+            case 1://上方向の時に
+                TObj = GameObject.Find("DownRoadTrigger");//下の道を取得
+                mainchar.transform.position = new Vector3(TObj.transform.position.x, TObj.transform.position.y + 2, TObj.transform.position.z);//対応した位置にプレイヤーを移動
+                NewRoom();//マップジェネレートスクリプトにある新しい部屋に入った時の処理を追加
+                break;//以下ほぼ同文
+            case 2:
+                TObj = GameObject.Find("LeftRoadTrigger");
+                mainchar.transform.position = new Vector3(TObj.transform.position.x + 2, TObj.transform.position.y, TObj.transform.position.z);
+                NewRoom();
+                break;
+            case 3:
+                TObj = GameObject.Find("UpRoadTrigger");
+                mainchar.transform.position = new Vector3(TObj.transform.position.x, TObj.transform.position.y - 2, TObj.transform.position.z);
+                NewRoom();
+                break;
+            case 4:
+                TObj = GameObject.Find("RightRoadTrigger");
+                mainchar.transform.position = new Vector3(TObj.transform.position.x - 2, TObj.transform.position.y, TObj.transform.position.z);
+                NewRoom();
+                break;
+            default:
+                break;
+        }
         if (g_pointx == g_nowpositionx && g_pointy == g_nowpositiony)//生成の最終ポイントと今のプレイやーの位置が同じ場合
         {
-            Instantiate(stairs, new Vector3(10,10,0), Quaternion.identity, this.transform);//次の階層に行く階段を生成する
+            //Instantiate(stairs, new Vector3(10,10,0), Quaternion.identity, this.transform);//次の階層に行く階段を生成する
         }
     }
+    #endregion
 }

@@ -11,46 +11,46 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SkillCreate.unity
     guid: 70261db675e691c4084def4a93e9b303
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/MapGenerate.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/naokimap/Scenes/Stage1000.unity
+    path: Assets/Scenes/Map/Stage1000.unity
     guid: cf5b77758a9c05a49833cc879d21ecce
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage10.unity
+    path: Assets/Scenes/Map/Stage10.unity
     guid: eb25d0d0f34b73c4597b5c7f18406af0
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage11.unity
+    path: Assets/Scenes/Map/Stage11.unity
     guid: 742f488bbe13379468b9447b54ed9ee1
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage12.unity
+    path: Assets/Scenes/Map/Stage12.unity
     guid: ad48258fafbb95544a5f62b5d83453ed
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage13.unity
+    path: Assets/Scenes/Map/Stage13.unity
     guid: 9ac33841bf02198468fa8486ea68bb7b
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage14.unity
+    path: Assets/Scenes/Map/Stage14.unity
     guid: 61310e7a94de81b409b3f858337d105d
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage15.unity
+    path: Assets/Scenes/Map/Stage15.unity
     guid: 72bc78ad640d4fb4285efc06451c49c6
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage16.unity
+    path: Assets/Scenes/Map/Stage16.unity
     guid: f7837ad9f06a4bf4d91ea5567ca43b94
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage17.unity
+    path: Assets/Scenes/Map/Stage17.unity
     guid: 02b4f0d8bc506b14882aa3e4448fec9b
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage18.unity
+    path: Assets/Scenes/Map/Stage18.unity
     guid: 219da910aa90412458b4daba47cae70e
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage19.unity
+    path: Assets/Scenes/Map/Stage19.unity
     guid: 98f7eb0e20ba7d942b07dc4c09778d4f
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage20.unity
+    path: Assets/Scenes/Map/Stage20.unity
     guid: dcd3621d533e6f043a9d5dc713c2212d
   - enabled: 1
-    path: Assets/naokimap/Scenes/Stage2000.unity
+    path: Assets/Scenes/Map/Stage2000.unity
     guid: 86d79cd3a87d9e646b53703ac370ba8b
   m_configObjects: {}
