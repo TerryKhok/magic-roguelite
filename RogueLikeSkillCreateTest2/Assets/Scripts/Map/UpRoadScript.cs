@@ -26,11 +26,14 @@ public class UpRoadScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony + 2, MapGeneraterScript.Instance.g_nowpositionx];
-        _roomnumberstr = _roomnumberint.ToString();
-        MapGeneraterScript.Instance.RoomMet(1);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony + 2, MapGeneraterScript.Instance.g_nowpositionx];
+            _roomnumberstr = _roomnumberint.ToString();
+            MapGeneraterScript.Instance.RoomMet(1);
+        }
     }
-    public void UpSceneload()
+        public void UpSceneload()
     {
         SceneManager.LoadScene("Stage" + _roomnumberstr);
     }

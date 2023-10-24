@@ -26,9 +26,12 @@ public class LeftRoadScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony, MapGeneraterScript.Instance.g_nowpositionx - 2];
-        _roomnumberstr = _roomnumberint.ToString();
-        MapGeneraterScript.Instance.RoomMet(4);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony, MapGeneraterScript.Instance.g_nowpositionx - 2];
+            _roomnumberstr = _roomnumberint.ToString();
+            MapGeneraterScript.Instance.RoomMet(4);
+        }
     }
     public void LeftSceneload()
     {
