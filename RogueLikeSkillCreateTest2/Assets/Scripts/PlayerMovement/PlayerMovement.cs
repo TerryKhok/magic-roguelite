@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb = null;
     [SerializeField] private float _Speed = 1.0f;
     [SerializeField] private float _roatation_speed = 100.0f;
+    int hp = 10;
 
     private void Start()
     {
@@ -89,5 +90,10 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, torotation, _roatation_speed * Time.deltaTime);
         }
 
+    }
+
+    public void PlayerTakeDamage(int dmg)
+    {
+        hp -= dmg;
     }
 }
