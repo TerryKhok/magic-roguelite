@@ -44,7 +44,6 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
     GameObject roadsid;//横の道のプレハブ
     GameObject froom;//部屋のプレハブ
     GameObject Player;//プレイヤーのプレハブ
-    GameObject stairs;//階段のプレハブ
 
     GameObject NewPlayer;//imageプレイヤー本体
 
@@ -80,7 +79,6 @@ public class MapGeneraterScript : MonoBehaviour //ミニマップを生成するためのスク
         roadsid = (GameObject)Resources.Load("MapResource/roadsid");//横の道のプレハブを取得
         froom = (GameObject)Resources.Load("MapResource/froom");//部屋のプレハブを取得
         Player = (GameObject)Resources.Load("MapResource/Player");//プレイヤーのプレハブを取得
-        stairs = (GameObject)Resources.Load("MapResource/Stairs");//階段のプレハブを取得
         mainchar = TObj = GameObject.Find("PlayerMoveR (1)");//メインキャラを取得
         SceneManager.sceneLoaded += OnSceneLoaded;
         Init();//更新処理
