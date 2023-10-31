@@ -57,3 +57,29 @@ public class MechanicsGenerateCube : SkillProgress, ISkillProgress
     }
 }
 
+
+
+
+//----------------------------ここからエネミー----------------------//
+public class EnemyMechanicsDamage : SkillProgress, ISkillProgress
+{
+    public EnemyMechanicsDamage(int t) : base(t)
+    {
+        Debug.Log($"[Generated] EnemyMechanicsDamage: {t}");
+    }
+    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
+    {
+        token.ThrowIfCancellationRequested();
+        await UniTask.Delay(0);
+        return elem;
+    }
+
+    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    {
+        ProgressId id = ProgressId.EnemyMechanicsDamage;
+        int dmg = SkillDB.GetSkillVariableValue(id, 0, GetTier());
+        token.ThrowIfCancellationRequested();
+        elem.GetTargets().ForEach(t => { Object.Destroy(t); });
+    }
+}
+

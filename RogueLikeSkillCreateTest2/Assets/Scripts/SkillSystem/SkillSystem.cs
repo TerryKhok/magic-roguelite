@@ -94,7 +94,10 @@ namespace SkillSystem
         SystemLoopStart,
         SystemLoopEnd,
         SystemWayStart,
-        SystemWayEnd
+        SystemWayEnd,
+
+        EnemyTargetBall,
+        EnemyMechanicsDamage,
     }
 
     public struct SkillVariable
