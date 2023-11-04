@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class SkillUser : MonoBehaviour
 {
-    private List<List<ISkillProgress>> _skillSlot = new List<List<ISkillProgress>>();
+    private List<List<SkillProgress>> _skillSlot = new List<List<SkillProgress>>();
 
     void Start()
     {
@@ -19,14 +19,14 @@ public class SkillUser : MonoBehaviour
     public async void RunSkill(int num)
     {
         CancellationToken token = this.GetCancellationTokenOnDestroy();
-        List<ISkillProgress> code = new List<ISkillProgress>(_skillSlot[num]);
+        List<SkillProgress> code = new List<SkillProgress>(_skillSlot[num]);
         SkillElements elem = new SkillElements(gameObject.transform);
-        foreach (ISkillProgress progress in code)
+        foreach (SkillProgress progress in code)
         {
             try
             {
-                progress.SkillProgressNoWait(elem, token);
-                elem = await progress.SkillProgress(elem, token);
+                progress.RunProgressNoWait(elem, token);
+                elem = await progress.RunProgress(elem, token);
             }
             catch (OperationCanceledException e)
             {

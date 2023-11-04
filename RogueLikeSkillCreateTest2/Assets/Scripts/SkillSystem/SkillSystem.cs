@@ -65,23 +65,26 @@ namespace SkillSystem
             _tier = t;
             //_args = new int[5];
         }
-    }
 
-    //ノード全てに実装するインターフェイス（継承しているインターフェイスで実装しているものもある）
-    public interface ISkillProgress
-    {
-        //実行時に処理が終わるまで次のノードに待機してもらう処理
-        public UniTask<SkillElements> SkillProgress(SkillElements elem, CancellationToken token);
+        public virtual async UniTask<SkillElements> RunProgress(SkillElements elem, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            await UniTask.Delay(0);
+            return elem;
+        }
 
-        //実行時に処理を待機せずに次のノードに行く処理
-        public void SkillProgressNoWait(SkillElements elem, CancellationToken token);
+        public virtual void RunProgressNoWait(SkillElements elem, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+        }
     }
 
     //ループ処理が含まれるノードに実装するインターフェイス
-    public interface ISkillLoopStartProgress : ISkillProgress
+    public abstract class SkillLoopStartProgress : SkillProgress
     {
-        public void AddLoopProgressList(ISkillProgress progress);   //ループ内で実行する処理を追加
-        public Type GetLoopEndProgressType();                       //ループ処理終了ノードの取得用（要設定）
+        public SkillLoopStartProgress(int t) : base(t) { }
+        public abstract void AddLoopProgressList(SkillProgress progress);   //ループ内で実行する処理を追加
+        public abstract Type GetLoopEndProgressType();                       //ループ処理終了ノードの取得用（要設定）
     }
 
     //IDを列挙。使うのはSkillCompile.csのConvertIdToISkillProgress関数

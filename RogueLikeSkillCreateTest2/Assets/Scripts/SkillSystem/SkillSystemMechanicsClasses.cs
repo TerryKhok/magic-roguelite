@@ -7,43 +7,35 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEditor;
 
-public class MechanicsDamage : SkillProgress, ISkillProgress
+public class MechanicsDamage : SkillProgress
 {
     public MechanicsDamage(int t) : base(t)
     {
         Debug.Log($"[Generated] MechanicsDamage: {t}");
     }
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
 
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         ProgressId id = ProgressId.MechanicsDamage;
         int dmg = SkillDB.GetSkillVariableValue(id, 0, GetTier());
         token.ThrowIfCancellationRequested();
-        elem.GetTargets().ForEach(t => { Object.Destroy(t); });
+        elem.GetTargets().ForEach(t => {
+            if (t.CompareTag("Enemy"))
+            {
+                //t.GetComponent<EnemyManager>().EnemyTakeDamage(dmg);
+            }
+        });
     }
 }
 
-public class MechanicsGenerateCube : SkillProgress, ISkillProgress
+public class MechanicsGenerateCube : SkillProgress
 {
     public MechanicsGenerateCube(int t) : base(t)
     {
         Debug.Log($"[Generated] MechanicsGenerateCube: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
-
-    async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override async void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
@@ -61,25 +53,25 @@ public class MechanicsGenerateCube : SkillProgress, ISkillProgress
 
 
 //----------------------------ここからエネミー----------------------//
-public class EnemyMechanicsDamage : SkillProgress, ISkillProgress
+public class EnemyMechanicsDamage : SkillProgress
 {
     public EnemyMechanicsDamage(int t) : base(t)
     {
         Debug.Log($"[Generated] EnemyMechanicsDamage: {t}");
     }
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
 
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         ProgressId id = ProgressId.EnemyMechanicsDamage;
         int dmg = SkillDB.GetSkillVariableValue(id, 0, GetTier());
         token.ThrowIfCancellationRequested();
-        elem.GetTargets().ForEach(t => { Object.Destroy(t); });
+        elem.GetTargets().ForEach(t =>
+        {
+            if (t.CompareTag("Player"))
+            {
+                t.GetComponent<PlayerMovement>().PlayerTakeDamage(dmg);
+            }
+        });
     }
 }
 

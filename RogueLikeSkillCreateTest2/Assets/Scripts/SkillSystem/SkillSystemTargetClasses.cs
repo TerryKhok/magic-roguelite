@@ -10,14 +10,14 @@ using UnityEditor;
 
 
 
-public class TargetBall : SkillProgress, ISkillProgress
+public class TargetBall : SkillProgress
 {
     public TargetBall(int t) : base(t)
     {
         Debug.Log($"[Generated] TargetBall: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
+    public override async UniTask<SkillElements> RunProgress(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
@@ -53,7 +53,7 @@ public class TargetBall : SkillProgress, ISkillProgress
         return elem;
     }
 
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
     }
@@ -62,28 +62,15 @@ public class TargetBall : SkillProgress, ISkillProgress
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //--------------------------ここからエネミー------------------------------//
-public class EnemyTargetBall : SkillProgress, ISkillProgress
+public class EnemyTargetBall : SkillProgress
 {
     public EnemyTargetBall(int t) : base(t)
     {
         Debug.Log($"[Generated] EnemyTargetBall: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
+    public override async UniTask<SkillElements> RunProgress(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
@@ -119,7 +106,7 @@ public class EnemyTargetBall : SkillProgress, ISkillProgress
         return elem;
     }
 
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
     }

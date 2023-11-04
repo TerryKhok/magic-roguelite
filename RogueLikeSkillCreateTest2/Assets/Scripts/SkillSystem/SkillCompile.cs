@@ -10,19 +10,19 @@ public class SkillCompile : MonoBehaviour
 {
     [SerializeField] List<ProgressId> _progressIdList = new List<ProgressId>();
 
-    public List<ISkillProgress> GetSkill()
+    public List<SkillProgress> GetSkill()
     {
         return Compile();
     }
 
 
 
-    List<ISkillProgress> Compile()
+    List<SkillProgress> Compile()
     {
-        List<ISkillProgress> list = new List<ISkillProgress>(); //最終的に返すリスト
-        List<ISkillProgress> surplus = new List<ISkillProgress>();  //ループ処理で使うリスト
+        List<SkillProgress> list = new List<SkillProgress>(); //最終的に返すリスト
+        List<SkillProgress> surplus = new List<SkillProgress>();  //ループ処理で使うリスト
         foreach (var id in _progressIdList)
-        {       //progressId型のリストをISkillProgress型のリストへ
+        {       //progressId型のリストをSkillProgress型のリストへ
             surplus.Add(ConvertIdToISkillProgress(id));
         }
 
@@ -31,12 +31,12 @@ public class SkillCompile : MonoBehaviour
             foreach (var progress in surplus.ToArray()) //途中でsurplusを変更できるループ
             {
                 surplus.Remove(progress);
-                if (progress is ISkillLoopStartProgress)
+                if (progress is SkillLoopStartProgress)
                 {
-                    var result = CompressProcess((ISkillLoopStartProgress)progress, surplus);
+                    var result = CompressProcess((SkillLoopStartProgress)progress, surplus);
                     list.Add(result.r_compress);
 
-                    surplus = new List<ISkillProgress>(result.r_surplus);
+                    surplus = new List<SkillProgress>(result.r_surplus);
                     Debug.Log(surplus.Count);
                     break;
                 }
@@ -49,18 +49,18 @@ public class SkillCompile : MonoBehaviour
         return list;
     }
 
-    (ISkillProgress r_compress, List<ISkillProgress> r_surplus) CompressProcess(ISkillLoopStartProgress compress, List<ISkillProgress> surplus)
+    (SkillProgress r_compress, List<SkillProgress> r_surplus) CompressProcess(SkillLoopStartProgress compress, List<SkillProgress> surplus)
     {   //ループ系処理を圧縮する処理
-        (ISkillProgress r_compress, List<ISkillProgress> r_surplus) result = default;
+        (SkillProgress r_compress, List<SkillProgress> r_surplus) result = default;
         Type compressEnd = compress.GetLoopEndProgressType();
         do
         {
-            foreach (ISkillProgress progress in surplus.ToArray())
+            foreach (SkillProgress progress in surplus.ToArray())
             {
                 surplus.Remove(progress);
-                if (progress is ISkillLoopStartProgress)
+                if (progress is SkillLoopStartProgress)
                 {
-                    var compResult = CompressProcess((ISkillLoopStartProgress)progress, surplus);
+                    var compResult = CompressProcess((SkillLoopStartProgress)progress, surplus);
                     compress.AddLoopProgressList(compResult.r_compress);
                     surplus = compResult.r_surplus;
                     break;
@@ -82,7 +82,7 @@ public class SkillCompile : MonoBehaviour
         return result;
     }
 
-    public ISkillProgress ConvertIdToISkillProgress(ProgressId id) //string型のidを渡すとISkillProgressのインスタンスで返してくれる
+    public SkillProgress ConvertIdToISkillProgress(ProgressId id) //string型のidを渡すとSkillProgressのインスタンスで返してくれる
     {
         switch (id)
         {
