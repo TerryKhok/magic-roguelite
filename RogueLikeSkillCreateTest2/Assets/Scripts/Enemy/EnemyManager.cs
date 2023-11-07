@@ -8,24 +8,31 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    //“G‚ÌŠî–{“I•Ï”
     [SerializeField]
-    int EnemyType;           //“G‚Ìí—Ş
+    private int EnemyType;  //“G‚Ìí—Ş
     //“G‚Ìí—Ş
     //‚PF‹ß‚¢
     //‚QF‚»‚ñ‚È‹ß‚­‚È‚¢
     //‚RF‰“‚¢
     [SerializeField]
-    int EnemyHealth;         //“G‚ÌHP
+    int EnemyHealth;        //“G‚ÌHP
     [SerializeField]
-    int EnemyDamage;         //“G‚Ì—Í
-    [SerializeField]
-    float EnemySpeed;        //“G‚Ì“®‚«‚Ì‘¬‚³
-    [SerializeField]
-    int EnemyAttackSpeed;    //“G‚ÌUŒ‚‚Ì‘¬‚³
-    private Transform Target;//’Ç‚¢•t‚­ƒ^[ƒQƒbƒgiƒvƒŒƒCƒ„j
+    float EnemySpeed;       //“G‚Ì“®‚«‚Ì‘¬‚³
 
+    //UŒ‚•Ï”
+    [SerializeField]
+    float EnemyAttackSpeed;   //“G‚ÌUŒ‚‚Ì‘¬‚³
+    [SerializeField]
+    int EnemyDamage;        //“G‚Ì—Í
+
+    //‘¼‚Ì•Ï”
+    float fireRateTime = 0.0f;  //’eŠÛ‚Ì”­Ë‚ÌŠÔŠi”[‚½‚ß
+    public GameObject bullet;   //’eŠÛ
+    private Transform Target;   //’Ç‚¢•t‚­ƒ^[ƒQƒbƒgiƒvƒŒƒCƒ„j
     private float maxRange;     //ƒvƒŒƒCƒ„‚ğ‹C•t‚­”ÍˆÍ
     private float minRange;     //ƒvƒŒƒCƒ„‚É‹ß‚Ã‚­‚Æ~‚Ü‚é‚½‚ß‚Ì”ÍˆÍ
+    private bool inRange = false;       //“G‚ÍƒvƒŒƒCƒ„[‚Ì”ÍˆÍ‚É‚¢‚éƒtƒ‰ƒO
 
     void Start()
     {
@@ -35,7 +42,11 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         EnemySet();
-        EnemyTakeDamage();
+    }
+
+    void FixedUpdate()
+    {
+        EnemyAttack();
     }
 
     void EnemySet()
@@ -49,7 +60,7 @@ public class EnemyManager : MonoBehaviour
                 break;
             case 2:
                 maxRange = 12;
-                minRange = 3;
+                minRange = 4.5f;
                 MediumRange();
                 break;
             case 3:
@@ -76,6 +87,11 @@ public class EnemyManager : MonoBehaviour
         if (Vector3.Distance(Target.position, transform.position) <= maxRange && Vector3.Distance(Target.position, transform.position) >= minRange - 1)
         {
             FollowPlayer();
+            inRange = true;
+        }
+        else
+        {
+            inRange = false;
         }
     }
 
@@ -85,6 +101,11 @@ public class EnemyManager : MonoBehaviour
         if (Vector3.Distance(Target.position, transform.position) <= maxRange && Vector3.Distance(Target.position, transform.position) >= minRange - 1)
         {
             FollowPlayer();
+            inRange = true;
+        }
+        else
+        {
+            inRange = false;
         }
     }
 
@@ -94,19 +115,27 @@ public class EnemyManager : MonoBehaviour
         if (Vector3.Distance(Target.position, transform.position) <= maxRange && Vector3.Distance(Target.position, transform.position) >= minRange - 1)
         {
             FollowPlayer();
+            inRange = true;
+        }
+        else
+        {
+            inRange = false;
         }
     }
 
-    void EnemyTakeDamage()
+    void EnemyTakeDamage(int dmg)
     {
+        EnemyHealth -= dmg;
+
         if (EnemyHealth > 0)
         {
-            //‚à‚µ“G‚ªUŒ‚‚³‚ê‚ÎHP‚ªŒ¸‚éŠÖ”
+            //“G‚ªUŒ‚‚³‚ê‚é‚ÆHP‚ªŒ¸‚é
             Debug.Log("¶‚«‚Ä‚¢‚é");
         }
 
         if (EnemyHealth <= 0)
         {
+            inRange = false; //UŒ‚‚â‚ß‚é
             //“G‚ª€‚ÊƒR[ƒh
             Debug.Log("“I€‚ñ‚¾");
         }
@@ -120,7 +149,20 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {
+            //ƒvƒŒƒCƒ„[‚ÉŒü‚©‚¤
             transform.position = Vector3.MoveTowards(transform.position, Target.transform.position, EnemySpeed * Time.deltaTime);
+        }
+    }
+
+    void EnemyAttack() //UŒ‚ˆ—
+    {
+        if (inRange)
+        {
+            if (Time.time >= fireRateTime + EnemyAttackSpeed)
+            {
+                var bulletInst = Instantiate(bullet, transform.position, transform.rotation);
+                fireRateTime = Time.time;
+            }
         }
     }
 }
