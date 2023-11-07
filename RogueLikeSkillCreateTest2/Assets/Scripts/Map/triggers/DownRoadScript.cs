@@ -18,17 +18,18 @@ public class DownRoadScript : MonoBehaviour
 
     public void DownRoadGenerate(int downroad)//道を生成するかしないか
     {
-        if (downroad != 1)
+        if (downroad != 1 &&downroad != 3)
         {
             spriterenderer.enabled = true;
             boxcollider2d.isTrigger = false;
         }
+        Debug.Log("下道反応");
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony - 2, MapGeneraterScript.Instance.g_nowpositionx];//部屋番号獲得
+            _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony + 2, MapGeneraterScript.Instance.g_nowpositionx];//部屋番号獲得
             _roomnumberstr = _roomnumberint.ToString();//文字列に変更
             MapGeneraterScript.Instance.RoomMet(3);//マップジェネレートに引数を返す
         }

@@ -3,38 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RightRoadScript : MonoBehaviour
+public class LeftRoadScript : MonoBehaviour
 {
     private SpriteRenderer spriterenderer;
     private BoxCollider2D boxcollider2d;
 
-    private int roomnumberint;
-    private string roomnumberstr;
+    private int _roomnumberint;
+    private string _roomnumberstr;
     void Awake()
     {
         spriterenderer = GetComponent<SpriteRenderer>();
         boxcollider2d = GetComponent<BoxCollider2D>();
     }
 
-    public void RightRoadGenerate(int rightroad)
+    public void LeftRoadGenerate(int leftroad)
     {
-        if (rightroad != 2)
+        if (leftroad != 2 && leftroad != 4)
         {
             spriterenderer.enabled = true;
             boxcollider2d.isTrigger = false;
         }
+        Debug.Log("ç∂ìπîΩâû");
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony, MapGeneraterScript.Instance.g_nowpositionx + 2];
-            roomnumberstr = roomnumberint.ToString();
-            MapGeneraterScript.Instance.RoomMet(2);
+            _roomnumberint = MapGeneraterScript.Instance.g_field[MapGeneraterScript.Instance.g_nowpositiony, MapGeneraterScript.Instance.g_nowpositionx - 2];
+            _roomnumberstr = _roomnumberint.ToString();
+            MapGeneraterScript.Instance.RoomMet(4);
         }
     }
-    public void RightSceneload()
+    public void LeftSceneload()
     {
-        SceneManager.LoadScene("Stage" + roomnumberstr);
+        SceneManager.LoadScene("Stage" + _roomnumberstr);
     }
 }
