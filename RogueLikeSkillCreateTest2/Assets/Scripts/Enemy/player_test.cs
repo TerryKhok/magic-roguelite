@@ -9,7 +9,7 @@ public class player_test : MonoBehaviour
     public float moveSpeed;
     Vector2 movement;
     Rigidbody2D rb;
-
+    /*
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
@@ -25,4 +25,5 @@ public class player_test : MonoBehaviour
     {
         rb.MovePosition(rb.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
     }
+    */
 }

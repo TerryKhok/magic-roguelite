@@ -18,11 +18,12 @@ public class RightRoadScript : MonoBehaviour
 
     public void RightRoadGenerate(int rightroad)
     {
-        if (rightroad != 2)
+        if (rightroad != 2 && rightroad != 4)
         {
             spriterenderer.enabled = true;
             boxcollider2d.isTrigger = false;
         }
+        Debug.Log("‰E“¹”½‰ž");
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
