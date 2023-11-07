@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 48ea8203f8b896248845f8048fb4edbc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 909b84c0dbaa7c842a38e5f5d603fc1e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -122,9 +122,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyType: 3
   EnemyHealth: 5
-  EnemyDamage: 1
   EnemySpeed: 3
   EnemyAttackSpeed: 1
+  EnemyDamage: 1
+  bullet: {fileID: 0}
 --- !u!61 &1024419880476032760
 BoxCollider2D:
   m_ObjectHideFlags: 0

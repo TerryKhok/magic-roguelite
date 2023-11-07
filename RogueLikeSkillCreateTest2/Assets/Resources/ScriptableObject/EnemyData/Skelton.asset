@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d39ca1d798cbf2742be9b22ec1fe3768, type: 3}
+  m_Script: {fileID: 11500000, guid: c1caf08442d39e5499026147266cac0c, type: 3}
   m_Name: Skelton
   m_EditorClassIdentifier: 
-  enemyname: "\u30B9\u30B1\u30EB\u30C8\u30F3"
+  enemyname: skel
   droplist:
-  - itemdata: {fileID: 11400000, guid: ee9bf7ac4cb27d34ea48b349fbec8b44, type: 2}
+  - itemdata: {fileID: 11400000, guid: a9ef4a1c2a24b2945a53951851c8e4af, type: 2}
     dropamount: 1
-    dropratio: 20
-  - itemdata: {fileID: 11400000, guid: 441b8f900eb8ee442a519f74afda4ec1, type: 2}
-    dropamount: 1
-    dropratio: 60
+    dropratio: 100
+  - itemdata: {fileID: 11400000, guid: 0b48745763e42934aa0366f410848547, type: 2}
+    dropamount: 2
+    dropratio: 50
   Enemyicon: {fileID: 0}

@@ -36,7 +36,7 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
-        Target = FindObjectOfType<player_test>().transform;
+        Target = FindObjectOfType<PlayerMovement>().transform;
     }
 
     void Update()

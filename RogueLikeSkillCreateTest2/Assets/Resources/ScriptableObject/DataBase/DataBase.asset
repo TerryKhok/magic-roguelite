@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 641445502d2a9f443a0216bfa6846463, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d4a6fb98b171714f97fc600d64e3644, type: 3}
   m_Name: DataBase
   m_EditorClassIdentifier: 
   itemDatabase:
-  - {fileID: 11400000, guid: ee9bf7ac4cb27d34ea48b349fbec8b44, type: 2}
-  - {fileID: 11400000, guid: 441b8f900eb8ee442a519f74afda4ec1, type: 2}
-  - {fileID: 11400000, guid: 63b061a967ce1a24887bd587adfde579, type: 2}
+  - {fileID: 11400000, guid: a89a9d6ee035aac42b0148d5e106ab19, type: 2}
+  - {fileID: 11400000, guid: 0b48745763e42934aa0366f410848547, type: 2}
+  - {fileID: 11400000, guid: a9ef4a1c2a24b2945a53951851c8e4af, type: 2}
   enemyDatabase:
-  - {fileID: 11400000, guid: 533d2a45aa3cbd343b6b6b7f6d997319, type: 2}
-  - {fileID: 11400000, guid: 6a3055a42f7cd8445b346be2a46e3b92, type: 2}
+  - {fileID: 11400000, guid: 54714328219a5f14da14c3b9e6a19ecb, type: 2}
+  - {fileID: 11400000, guid: bac5fe4c18cf9924c801766b8912a0d9, type: 2}

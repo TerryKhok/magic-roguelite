@@ -152,10 +152,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 295970984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfd473a433d2a864a9299b42901bbf30, type: 3}
+  m_Script: {fileID: 11500000, guid: 74ef021e3c8dbd74a93013364a0a1693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
+  _Speed: 1
+  _roatation_speed: 100
 --- !u!50 &295970986
 Rigidbody2D:
   serializedVersion: 4
@@ -401,7 +402,7 @@ MonoBehaviour:
   EnemySpeed: 4
   EnemyAttackSpeed: 0.5
   EnemyDamage: 10
-  bullet: {fileID: 5192149360140063755, guid: 015987aa68a17b74596c89810ff445aa, type: 3}
+  bullet: {fileID: 5192149360140063755, guid: a8c85f568bfe70047b2e6bbdd68a3a06, type: 3}
 --- !u!1 &1940234528
 GameObject:
   m_ObjectHideFlags: 0
