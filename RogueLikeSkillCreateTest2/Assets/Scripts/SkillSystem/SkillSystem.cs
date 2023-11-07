@@ -13,6 +13,12 @@ namespace SkillSystem
     {
         Vector3 pos;
         Quaternion rotate;
+        public LocationData(Transform tf)
+        {
+            pos = tf.position;
+            rotate = tf.rotation;
+        }
+
         public void ResetData(Transform tf)
         {
             pos = tf.position;
@@ -23,27 +29,42 @@ namespace SkillSystem
             this.pos = pos;
             this.rotate = rotate;
         }
-        public LocationData(Transform tf)
-        {
-            pos = tf.position;
-            rotate = tf.rotation;
-        }
         public Vector3 GetPos() { return pos; }
         public Quaternion GetRotate() { return rotate; }
     }
 
+    //スキルのノード補正値
+    public struct SkillCorrection
+    {
+        float fixedValue;
+        float multi;
+
+        public SkillCorrection(float val = 0, float mul = 1)
+        {
+            fixedValue = val;
+            multi = mul;
+        }
+
+        public void AddFixed(float value) { fixedValue += value; }
+        public void AddMulti(float value) { fixedValue *= value; multi *= value; }
+        public float GetFixedValue() { return fixedValue; }
+        public float GetMulti() { return multi; }
+    }
 
     public struct SkillElements
     {
         LocationData ld;
         List<GameObject> targets;
+        SkillCorrection args;
         public SkillElements(Transform t)
         {
             ld = new LocationData(t);
             targets = new List<GameObject>();
+            args = new SkillCorrection();
         }
         public LocationData GetLocationData() { return ld; }
         public List<GameObject> GetTargets() { return targets; }
+        public SkillCorrection GetArgs() { return args; }
 
         public void AddTargets(GameObject obj) { targets.Add(obj); }
         public void SetLocationData(Transform tf) { ld.ResetData(tf); }
@@ -53,12 +74,9 @@ namespace SkillSystem
     public class SkillProgress
     {
         int _tier;
-        //int[] _args;
 
         public int GetTier() { return _tier; }
         public void GetTier(int t) { _tier = t; }
-        //public int[] GetArgs() { return _args; }
-        //public int GetArgsValue(int i) { return _args[i]; }
 
         public SkillProgress(int t)
         {
@@ -103,17 +121,19 @@ namespace SkillSystem
         EnemyMechanicsDamage,
     }
 
+    //スキルデータベース
+    //1つの変数の保存形式（名前とティアに対応する値の配列）
     public struct SkillVariable
     {
         public string name;
         public int[] values;
     }
 
-
     public static class SkillDB
     {
         public static Dictionary<ProgressId, List<SkillVariable>> g_SkillVariableMap = new Dictionary<ProgressId, List<SkillVariable>>();
 
+        //データのロード
         public static void Initialize()
         {
             TextAsset resource = Resources.Load("SkillSystem/SkillSystem_Variables") as TextAsset;  //csvをロード
@@ -184,4 +204,97 @@ namespace SkillSystem
             return result;
         }
     }
+
+
+    //スキルコンパイル
+    public static class SkillCompile
+    {
+        public static List<SkillProgress> Compile(List<ProgressId> idList)
+        {
+            List<SkillProgress> list = new List<SkillProgress>(); //最終的に返すリスト
+            List<SkillProgress> surplus = new List<SkillProgress>();  //ループ処理で使うリスト
+            foreach (var id in idList)
+            {       //progressId型のリストをSkillProgress型のリストへ
+                surplus.Add(ConvertIdToISkillProgress(id));
+            }
+
+            do
+            {
+                foreach (var progress in surplus.ToArray()) //途中でsurplusを変更できるループ
+                {
+                    surplus.Remove(progress);
+                    if (progress is SkillLoopStartProgress)
+                    {
+                        var result = CompressProcess((SkillLoopStartProgress)progress, surplus);
+                        list.Add(result.r_compress);
+
+                        surplus = new List<SkillProgress>(result.r_surplus);
+                        Debug.Log(surplus.Count);
+                        break;
+                    }
+                    else
+                    {
+                        list.Add(progress);
+                    }
+                }
+            } while (surplus.Count > 0);
+            return list;
+        }
+
+        static (SkillProgress r_compress, List<SkillProgress> r_surplus) CompressProcess(SkillLoopStartProgress compress, List<SkillProgress> surplus)
+        {   //ループ系処理を圧縮する処理
+            (SkillProgress r_compress, List<SkillProgress> r_surplus) result = default;
+            Type compressEnd = compress.GetLoopEndProgressType();
+            do
+            {
+                foreach (SkillProgress progress in surplus.ToArray())
+                {
+                    surplus.Remove(progress);
+                    if (progress is SkillLoopStartProgress)
+                    {
+                        var compResult = CompressProcess((SkillLoopStartProgress)progress, surplus);
+                        compress.AddLoopProgressList(compResult.r_compress);
+                        surplus = compResult.r_surplus;
+                        break;
+                    }
+                    else if (progress.GetType().Equals(compressEnd))
+                    {
+                        Debug.Log(progress.GetType());
+                        result.r_compress = compress;
+                        result.r_surplus = surplus;
+                        return result;
+                    }
+                    else
+                    {
+                        compress.AddLoopProgressList(progress);
+                    }
+                }
+            } while (surplus.Count > 0);
+
+            return result;
+        }
+
+        public static SkillProgress ConvertIdToISkillProgress(ProgressId id) //string型のidを渡すとSkillProgressのインスタンスで返してくれる
+        {
+            switch (id)
+            {
+                case ProgressId.TargetBall:
+                    return new TargetBall(1);
+                case ProgressId.MechanicsDamage:
+                    return new MechanicsDamage(1);
+                case ProgressId.MechanicsGenerateCube:
+                    return new MechanicsGenerateCube(1);
+                case ProgressId.SystemLoopStart:
+                    return new SystemLoopStart(1);
+                case ProgressId.SystemLoopEnd:
+                    return new SystemLoopEnd(1);
+                case ProgressId.SystemWayStart:
+                    return new SystemWayStart(1);
+                case ProgressId.SystemWayEnd:
+                    return new SystemWayEnd(1);
+            }
+            return null;
+        }
+    }
+
 }

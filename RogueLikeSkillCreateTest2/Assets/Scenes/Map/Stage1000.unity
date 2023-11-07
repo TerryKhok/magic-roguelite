@@ -1752,7 +1752,6 @@ GameObject:
   - component: {fileID: 1631401089}
   - component: {fileID: 1631401090}
   - component: {fileID: 1631401092}
-  - component: {fileID: 1631401091}
   - component: {fileID: 1631401093}
   m_Layer: 9
   m_Name: PlayerMoveR (1)
@@ -1910,19 +1909,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Speed: 10
   _roatation_speed: 750
---- !u!114 &1631401091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631401083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec81dc6f5748bfe45b2e4a3adea9fea0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _progressIdList: 0100000002000000
 --- !u!114 &1631401092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1944,9 +1930,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1631401083}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12580b52add8c3a4cb3c1265e7e2edd2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bf60db3636dbe7478bd8832a4422826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _progressIdList: 0100000003000000
 --- !u!1 &1734058647
 GameObject:
   m_ObjectHideFlags: 0
