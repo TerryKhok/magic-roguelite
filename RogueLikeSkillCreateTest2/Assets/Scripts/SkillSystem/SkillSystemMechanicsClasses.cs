@@ -16,13 +16,30 @@ public class MechanicsDamage : SkillProgress
 
     public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
+        token.ThrowIfCancellationRequested();
+
         ProgressId id = ProgressId.MechanicsDamage;
         int dmg = SkillDB.GetSkillVariableValue(id, 0, GetTier());
-        token.ThrowIfCancellationRequested();
-        elem.GetTargets().ForEach(t => {
-            if (t.CompareTag("Enemy"))
+
+        SkillAttributes attr = elem.GetAttr();
+        if (attr.IsExist("AttackInc"))
+        {
+            dmg = (int)(dmg * attr.GetCorrection("AttackInc").GetMulti());
+            dmg = (int)(dmg + attr.GetCorrection("AttackInc").GetFixedValue());
+        }
+
+        elem.GetTargets().ForEach(t =>
+        {
+            if (elem.IsTarget(t))
             {
-                //t.GetComponent<EnemyManager>().EnemyTakeDamage(dmg);
+                if (elem.IsPlayer())
+                {
+                    //t.GetComponent<EnemyManager>().EnemyTakeDamage(dmg);
+                }
+                else
+                {
+                    t.GetComponent<PlayerMovement>().PlayerTakeDamage(dmg);
+                }
             }
         });
     }
@@ -42,36 +59,16 @@ public class MechanicsGenerateCube : SkillProgress
         ProgressId id = ProgressId.MechanicsGenerateCube;
         int lifeTime = SkillDB.GetSkillVariableValue(id, 0, GetTier());
 
+        SkillAttributes attr = elem.GetAttr();
+        if (attr.IsExist("RangeInc"))
+        {
+            lifeTime = (int)(lifeTime * attr.GetCorrection("RangeInc").GetMulti());
+            lifeTime = (int)(lifeTime + attr.GetCorrection("RangeInc").GetFixedValue());
+        }
+
         GameObject resource = Resources.Load("SkillSystem/SkillSystem_Mechanics_GenerateCube_Stub") as GameObject;
         GameObject cube = Object.Instantiate(resource, elem.GetLocationData().GetPos(), elem.GetLocationData().GetRotate());
         await UniTask.Delay(lifeTime);
         Object.Destroy(cube);
     }
 }
-
-
-
-
-//----------------------------ここからエネミー----------------------//
-public class EnemyMechanicsDamage : SkillProgress
-{
-    public EnemyMechanicsDamage(int t) : base(t)
-    {
-        Debug.Log($"[Generated] EnemyMechanicsDamage: {t}");
-    }
-
-    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
-    {
-        ProgressId id = ProgressId.EnemyMechanicsDamage;
-        int dmg = SkillDB.GetSkillVariableValue(id, 0, GetTier());
-        token.ThrowIfCancellationRequested();
-        elem.GetTargets().ForEach(t =>
-        {
-            if (t.CompareTag("Player"))
-            {
-                t.GetComponent<PlayerMovement>().PlayerTakeDamage(dmg);
-            }
-        });
-    }
-}
-

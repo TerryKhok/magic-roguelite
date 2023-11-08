@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using SkillSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,97 @@ using UnityEngine;
 
 namespace SkillSystem
 {
+    //IDを列挙。使うのはSkillCompile.csのConvertIdToISkillProgress関数
+    public enum ProgressId
+    {
+        None,
+        TargetBall,
+        MechanicsDamage,
+        MechanicsGenerateCube,
+        SystemLoopStart,
+        SystemLoopEnd,
+        SystemWayStart,
+        SystemWayEnd,
+    }
+
+    public enum SkillPartsId
+    {
+        AttackInc,
+        RangeInc,
+        SpeedInc,
+        BootInc,
+        ThreeWay,
+        Loop,
+    }
+
+
+    public struct Skill
+    {
+        SkillCompileElements elem;
+        List<ProgressId> idList;
+        List<SkillProgress> progress;
+        public Skill(List<ProgressId> ids)
+        {
+            elem = new SkillCompileElements(0);
+            idList = new List<ProgressId>(ids);
+            progress = new List<SkillProgress>(SkillCompile.Compile(idList));
+        }
+
+        public SkillCompileElements GetElem() { return elem; }
+        public List<SkillProgress> GetProgress() { return progress; }
+
+        public void GiveElemEffect() { progress = SkillCompile.ElemWrap(progress, elem); }
+    }
+
+    public struct SkillCompileElements
+    {
+        List<SkillPartsData> partsData;
+
+        public SkillCompileElements(int a)
+        {
+            partsData = new();
+        }
+        public List<SkillPartsData> GetPartsData() { return partsData; }
+
+        public void AddPartsData(SkillPartsData d) { partsData.Add(d); }
+    }
+
+    public struct SkillElements
+    {
+        LocationData ld;
+        List<GameObject> targets;
+        SkillAttributes attr;
+        bool casterIsPlayer;    //true=player, false=enemy
+        public SkillElements(Transform t)
+        {
+            ld = new LocationData(t);
+            targets = new List<GameObject>();
+            attr = new SkillAttributes(0);
+            casterIsPlayer = true;
+        }
+        public LocationData GetLocationData() { return ld; }
+        public List<GameObject> GetTargets() { return targets; }
+        public SkillAttributes GetAttr() { return attr; }
+        public bool IsPlayer() { return casterIsPlayer; }
+
+        public void AddTargets(GameObject obj) { targets.Add(obj); }
+        public void SetLocationData(Transform tf) { ld.ResetData(tf); }
+        public void SetLocationData(Vector3 pos, Quaternion rotate) { ld.ResetData(pos, rotate); }
+        public void SetCasterType(bool c) { casterIsPlayer = c; }
+
+        public bool IsTarget(GameObject obj)
+        {
+            if (casterIsPlayer)
+            {
+                return obj.CompareTag("Enemy");
+            }
+            else
+            {
+                return obj.CompareTag("Player");
+            }
+        }
+    }
+
     public struct LocationData
     {
         Vector3 pos;
@@ -33,43 +125,32 @@ namespace SkillSystem
         public Quaternion GetRotate() { return rotate; }
     }
 
-    //スキルのノード補正値
-    public struct SkillCorrection
+    public struct SkillAttributes
     {
-        float fixedValue;
-        float multi;
-
-        public SkillCorrection(float val = 0, float mul = 1)
+        Dictionary<string, SkillCorrection> attr;
+        public SkillAttributes(int a)
         {
-            fixedValue = val;
-            multi = mul;
+            attr = new();
         }
+        public SkillCorrection GetCorrection(string key) { return attr[key]; }
+        public bool IsExist(string key) { return attr.ContainsKey(key); }
 
-        public void AddFixed(float value) { fixedValue += value; }
-        public void AddMulti(float value) { fixedValue *= value; multi *= value; }
-        public float GetFixedValue() { return fixedValue; }
-        public float GetMulti() { return multi; }
+        public void AddAttr(string key, SkillCorrection value)
+        {
+            if (attr.ContainsKey(key))
+            {
+                SkillCorrection temp;
+                attr.TryGetValue(key, out temp);
+                temp.AddFixed(value.GetFixedValue());
+                temp.AddMulti(value.GetMulti());
+            }
+            else
+            {
+                attr.Add(key, value);
+            }
+        }
     }
 
-    public struct SkillElements
-    {
-        LocationData ld;
-        List<GameObject> targets;
-        SkillCorrection args;
-        public SkillElements(Transform t)
-        {
-            ld = new LocationData(t);
-            targets = new List<GameObject>();
-            args = new SkillCorrection();
-        }
-        public LocationData GetLocationData() { return ld; }
-        public List<GameObject> GetTargets() { return targets; }
-        public SkillCorrection GetArgs() { return args; }
-
-        public void AddTargets(GameObject obj) { targets.Add(obj); }
-        public void SetLocationData(Transform tf) { ld.ResetData(tf); }
-        public void SetLocationData(Vector3 pos, Quaternion rotate) { ld.ResetData(pos, rotate); }
-    }
 
     public class SkillProgress
     {
@@ -105,21 +186,6 @@ namespace SkillSystem
         public abstract Type GetLoopEndProgressType();                       //ループ処理終了ノードの取得用（要設定）
     }
 
-    //IDを列挙。使うのはSkillCompile.csのConvertIdToISkillProgress関数
-    public enum ProgressId
-    {
-        None,
-        TargetBall,
-        MechanicsDamage,
-        MechanicsGenerateCube,
-        SystemLoopStart,
-        SystemLoopEnd,
-        SystemWayStart,
-        SystemWayEnd,
-
-        EnemyTargetBall,
-        EnemyMechanicsDamage,
-    }
 
     //スキルデータベース
     //1つの変数の保存形式（名前とティアに対応する値の配列）
@@ -206,6 +272,9 @@ namespace SkillSystem
     }
 
 
+
+
+
     //スキルコンパイル
     public static class SkillCompile
     {
@@ -229,7 +298,6 @@ namespace SkillSystem
                         list.Add(result.r_compress);
 
                         surplus = new List<SkillProgress>(result.r_surplus);
-                        Debug.Log(surplus.Count);
                         break;
                     }
                     else
@@ -259,7 +327,6 @@ namespace SkillSystem
                     }
                     else if (progress.GetType().Equals(compressEnd))
                     {
-                        Debug.Log(progress.GetType());
                         result.r_compress = compress;
                         result.r_surplus = surplus;
                         return result;
@@ -274,24 +341,55 @@ namespace SkillSystem
             return result;
         }
 
+        public static List<SkillProgress> ElemWrap(List<SkillProgress> progressList, SkillCompileElements elem)
+        {
+            List<SkillProgress> result = new List<SkillProgress>(progressList);
+            SkillLoopStartProgress prog;
+            foreach (SkillPartsData part in elem.GetPartsData())
+            {
+                switch (part.GetId())
+                {
+                    case SkillPartsId.ThreeWay:
+                        prog = new SystemWayStart(0);
+                        foreach (var progress in result)
+                        {
+                            prog.AddLoopProgressList(progress);
+                        }
+                        result.Clear();
+                        result.Add(prog);
+                        break;
+                    case SkillPartsId.Loop:
+                        prog = new SystemLoopStart(0);
+                        foreach (var progress in result)
+                        {
+                            prog.AddLoopProgressList(progress);
+                        }
+                        result.Clear();
+                        result.Add(prog);
+                        break;
+                }
+            }
+            return result;
+        }
+
         public static SkillProgress ConvertIdToISkillProgress(ProgressId id) //string型のidを渡すとSkillProgressのインスタンスで返してくれる
         {
             switch (id)
             {
                 case ProgressId.TargetBall:
-                    return new TargetBall(1);
+                    return new TargetBall(0);
                 case ProgressId.MechanicsDamage:
-                    return new MechanicsDamage(1);
+                    return new MechanicsDamage(0);
                 case ProgressId.MechanicsGenerateCube:
-                    return new MechanicsGenerateCube(1);
+                    return new MechanicsGenerateCube(0);
                 case ProgressId.SystemLoopStart:
-                    return new SystemLoopStart(1);
+                    return new SystemLoopStart(0);
                 case ProgressId.SystemLoopEnd:
-                    return new SystemLoopEnd(1);
+                    return new SystemLoopEnd(0);
                 case ProgressId.SystemWayStart:
-                    return new SystemWayStart(1);
+                    return new SystemWayStart(0);
                 case ProgressId.SystemWayEnd:
-                    return new SystemWayEnd(1);
+                    return new SystemWayEnd(0);
             }
             return null;
         }

@@ -25,6 +25,20 @@ public class TargetBall : SkillProgress
         int speed = SkillDB.GetSkillVariableValue(id, 0, GetTier());
         int lifeTime = SkillDB.GetSkillVariableValue(id, 1, GetTier());
 
+        SkillAttributes attr = elem.GetAttr();
+        if (attr.IsExist("SpeedInc"))
+        {
+            Debug.Log("speed " + attr.GetCorrection("SpeedInc").GetMulti() + " / " + attr.GetCorrection("SpeedInc").GetFixedValue());
+            speed = (int)(speed * attr.GetCorrection("SpeedInc").GetMulti());
+            speed = (int)(speed + attr.GetCorrection("SpeedInc").GetFixedValue() * 2);
+        }
+        if (attr.IsExist("RangeInc"))
+        {
+            Debug.Log("range " + attr.GetCorrection("RangeInc").GetMulti() + " / " + attr.GetCorrection("RangeInc").GetFixedValue());
+            lifeTime = (int)(lifeTime * attr.GetCorrection("RangeInc").GetMulti());
+            lifeTime = (int)(lifeTime + attr.GetCorrection("RangeInc").GetFixedValue() * 200);
+        }
+
         GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Target_Ball_Stub") as GameObject);
         Transform objtf = obj.transform;
         objtf.position = elem.GetLocationData().GetPos();
@@ -41,7 +55,7 @@ public class TargetBall : SkillProgress
         {
             GameObject hit = awaiter.result.gameObject;
 
-            if (hit.gameObject.CompareTag("Enemy"))
+            if (elem.IsTarget(hit.gameObject))
             {
                 elem.AddTargets(hit.gameObject);
             }
@@ -51,63 +65,5 @@ public class TargetBall : SkillProgress
         Object.Destroy(obj);
 
         return elem;
-    }
-
-    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-    }
-}
-
-
-
-
-//--------------------------ここからエネミー------------------------------//
-public class EnemyTargetBall : SkillProgress
-{
-    public EnemyTargetBall(int t) : base(t)
-    {
-        Debug.Log($"[Generated] EnemyTargetBall: {t}");
-    }
-
-    public override async UniTask<SkillElements> RunProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-
-        ProgressId id = ProgressId.EnemyTargetBall;
-        int speed = SkillDB.GetSkillVariableValue(id, 0, GetTier());
-        int lifeTime = SkillDB.GetSkillVariableValue(id, 1, GetTier());
-
-        GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Enemy_Target_Ball_Stub") as GameObject);
-        Transform objtf = obj.transform;
-        objtf.position = elem.GetLocationData().GetPos();
-        objtf.rotation = elem.GetLocationData().GetRotate();
-
-        obj.GetComponent<Rigidbody2D>().velocity = objtf.up * speed;
-
-        UniTask<Collider2D> task1 = obj.GetAsyncTriggerEnter2DTrigger().OnTriggerEnter2DAsync(token);
-        UniTask task2 = UniTask.Delay(lifeTime);
-
-        var awaiter = await UniTask.WhenAny(task1, task2);
-
-        if (awaiter.result != null)
-        {
-            GameObject hit = awaiter.result.gameObject;
-
-            if (hit.gameObject.CompareTag("Player"))
-            {
-                elem.AddTargets(hit.gameObject);
-            }
-            elem.SetLocationData(hit.gameObject.transform);
-        }
-        elem.SetLocationData(obj.gameObject.transform);
-        Object.Destroy(obj);
-
-        return elem;
-    }
-
-    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
     }
 }

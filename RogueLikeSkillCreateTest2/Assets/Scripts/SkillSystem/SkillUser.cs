@@ -8,8 +8,7 @@ using UnityEngine;
 
 public class SkillUser : MonoBehaviour
 {
-    private List<List<SkillProgress>> _skillSlot = new List<List<SkillProgress>>();
-    [SerializeField] SkillElements _elem = new();
+    private List<Skill> _skillSlot = new List<Skill>();
 
     void Start()
     {
@@ -21,15 +20,18 @@ public class SkillUser : MonoBehaviour
     public async void RunSkill(int num)
     {
         CancellationToken token = this.GetCancellationTokenOnDestroy();         //UniTask用トークン取得
-        List<SkillProgress> code = new List<SkillProgress>(_skillSlot[num]);    //実行するスキルをスロットから選択
-        _elem.GetLocationData().ResetData(gameObject.transform);
+        SkillElements elem = new SkillElements(gameObject.transform);
+        foreach (SkillPartsData part in _skillSlot[num].GetElem().GetPartsData())
+        {
+            elem.GetAttr().AddAttr(part.GetId().ToString(), part.GetCor());
+        }
 
-        foreach (SkillProgress progress in code)    //処理を回して
+        foreach (SkillProgress progress in _skillSlot[num].GetProgress())    //処理を回して
         {
             try
             {
-                progress.RunProgressNoWait(_elem, token);       //処理の終了を待たないやつ
-                _elem = await progress.RunProgress(_elem, token);   //処理の終了を待つやつ
+                progress.RunProgressNoWait(elem, token);       //処理の終了を待たないやつ
+                elem = await progress.RunProgress(elem, token);   //処理の終了を待つやつ
             }
             catch (OperationCanceledException e)
             {

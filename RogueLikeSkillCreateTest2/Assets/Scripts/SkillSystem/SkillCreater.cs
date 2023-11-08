@@ -5,10 +5,20 @@ using UnityEngine;
 
 public class SkillCreater : MonoBehaviour
 {
-    [SerializeField] List<ProgressId> _progressIdList = new List<ProgressId>();
+    [SerializeField] List<ProgressId> _progressIdList = new();
+    [SerializeField] List<SkillPartsData> _partsDataList = new();
 
-    public List<SkillProgress> GetSkill()
+    public Skill GetSkill()
     {
-        return SkillCompile.Compile(_progressIdList);
+        Skill skill = new(_progressIdList);
+        foreach (var part in _partsDataList)
+        {
+            Debug.Log(part);
+            part.GenerateRandomData();
+            SkillCompileElements elem = skill.GetElem();
+            elem.AddPartsData(part);
+        }
+        skill.GiveElemEffect();
+        return skill;
     }
 }
