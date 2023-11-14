@@ -202,6 +202,7 @@ namespace SkillSystem
         //データのロード
         public static void Initialize()
         {
+            g_SkillVariableMap.Clear();
             TextAsset resource = Resources.Load("SkillSystem/SkillSystem_Variables") as TextAsset;  //csvをロード
             StringReader reader = new StringReader(resource.text);  //1行ずつ読み込む
             while (reader.Peek() != -1) //まだ行が読めるなら
