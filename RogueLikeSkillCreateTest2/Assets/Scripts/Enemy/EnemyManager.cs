@@ -123,8 +123,9 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    void EnemyTakeDamage(int dmg)
+    public void EnemyTakeDamage(int dmg)
     {
+        Debug.Log("dmg" + dmg);
         EnemyHealth -= dmg;
 
         if (EnemyHealth > 0)
@@ -137,6 +138,7 @@ public class EnemyManager : MonoBehaviour
         {
             inRange = false; //攻撃やめる
             //敵が死ぬコード
+            EnemyDeath();
             Debug.Log("的死んだ");
         }
     }
@@ -164,5 +166,10 @@ public class EnemyManager : MonoBehaviour
                 fireRateTime = Time.time;
             }
         }
+    }
+
+    void EnemyDeath()
+    {
+
     }
 }

@@ -34,12 +34,15 @@ public class MechanicsDamage : SkillProgress
             {
                 if (elem.IsPlayer())
                 {
-                    //t.GetComponent<EnemyManager>().EnemyTakeDamage(dmg);
+                    t.GetComponent<EnemyManager>().EnemyTakeDamage(dmg);
+                    Debug.Log("A");
                 }
                 else
                 {
                     t.GetComponent<PlayerMovement>().PlayerTakeDamage(dmg);
+                    Debug.Log("B");
                 }
+
             }
         });
     }

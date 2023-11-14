@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1024419880476032760}
   m_Layer: 0
   m_Name: Enemy2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 909b84c0dbaa7c842a38e5f5d603fc1e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6ae552610c41ced45af973ad1d796178, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   EnemySpeed: 3
   EnemyAttackSpeed: 1
   EnemyDamage: 1
-  bullet: {fileID: 0}
+  bullet: {fileID: 5192149360140063755, guid: 4de71d9945e3c3e43b9d171efb83d96f, type: 3}
 --- !u!61 &1024419880476032760
 BoxCollider2D:
   m_ObjectHideFlags: 0

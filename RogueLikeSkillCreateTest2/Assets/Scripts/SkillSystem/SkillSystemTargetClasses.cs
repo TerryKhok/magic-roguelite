@@ -28,13 +28,11 @@ public class TargetBall : SkillProgress
         SkillAttributes attr = elem.GetAttr();
         if (attr.IsExist("SpeedInc"))
         {
-            Debug.Log("speed " + attr.GetCorrection("SpeedInc").GetMulti() + " / " + attr.GetCorrection("SpeedInc").GetFixedValue());
             speed = (int)(speed * attr.GetCorrection("SpeedInc").GetMulti());
             speed = (int)(speed + attr.GetCorrection("SpeedInc").GetFixedValue() * 2);
         }
         if (attr.IsExist("RangeInc"))
         {
-            Debug.Log("range " + attr.GetCorrection("RangeInc").GetMulti() + " / " + attr.GetCorrection("RangeInc").GetFixedValue());
             lifeTime = (int)(lifeTime * attr.GetCorrection("RangeInc").GetMulti());
             lifeTime = (int)(lifeTime + attr.GetCorrection("RangeInc").GetFixedValue() * 200);
         }
@@ -57,6 +55,7 @@ public class TargetBall : SkillProgress
 
             if (elem.IsTarget(hit.gameObject))
             {
+                Debug.Log(hit.gameObject.name);
                 elem.AddTargets(hit.gameObject);
             }
             elem.SetLocationData(hit.gameObject.transform);
