@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 641445502d2a9f443a0216bfa6846463, type: 3}
+  m_Script: {fileID: 11500000, guid: 176233860ee30b84797bfaa9de5d72aa, type: 3}
   m_Name: DataBase
   m_EditorClassIdentifier: 
-  g_itemDatabase:
-  - {fileID: 11400000, guid: ee9bf7ac4cb27d34ea48b349fbec8b44, type: 2}
-  - {fileID: 11400000, guid: 441b8f900eb8ee442a519f74afda4ec1, type: 2}
-  - {fileID: 11400000, guid: 63b061a967ce1a24887bd587adfde579, type: 2}
-  g_enemyDatabase:
-  - {fileID: 11400000, guid: 533d2a45aa3cbd343b6b6b7f6d997319, type: 2}
-  - {fileID: 11400000, guid: 6a3055a42f7cd8445b346be2a46e3b92, type: 2}
+  g_itemDatabase: []
+  g_enemyDatabase: []

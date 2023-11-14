@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d39ca1d798cbf2742be9b22ec1fe3768, type: 3}
+  m_Script: {fileID: 11500000, guid: 29468038d3925e0439ce16581ef086b5, type: 3}
   m_Name: Zonbe
   m_EditorClassIdentifier: 
-  _enemyname: 
+  _enemyname: zombie
   _droplist:
-  - g_itemdata: {fileID: 11400000, guid: 441b8f900eb8ee442a519f74afda4ec1, type: 2}
-    g_dropamount: 2
-    g_dropratio: 500
-  - g_itemdata: {fileID: 11400000, guid: 441b8f900eb8ee442a519f74afda4ec1, type: 2}
+  - g_itemdata: {fileID: 11400000, guid: 2a0c6d5bdec57a74f994cac1663ca8f5, type: 2}
     g_dropamount: 1
-    g_dropratio: 400
+    g_dropratio: 700
   _Enemyicon: {fileID: 0}

@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d39ca1d798cbf2742be9b22ec1fe3768, type: 3}
+  m_Script: {fileID: 11500000, guid: 29468038d3925e0439ce16581ef086b5, type: 3}
   m_Name: Skelton
   m_EditorClassIdentifier: 
-  _enemyname: Skelton
+  _enemyname: skelton
   _droplist:
-  - g_itemdata: {fileID: 11400000, guid: ee9bf7ac4cb27d34ea48b349fbec8b44, type: 2}
+  - g_itemdata: {fileID: 11400000, guid: 196a59c5cf94be744afea5ff96a3de35, type: 2}
     g_dropamount: 1
     g_dropratio: 500
-  - g_itemdata: {fileID: 11400000, guid: 63b061a967ce1a24887bd587adfde579, type: 2}
-    g_dropamount: 1
-    g_dropratio: 100
+  - g_itemdata: {fileID: 11400000, guid: a842a64437a071d43b36b8add8315f40, type: 2}
+    g_dropamount: 2
+    g_dropratio: 1000
   _Enemyicon: {fileID: 0}

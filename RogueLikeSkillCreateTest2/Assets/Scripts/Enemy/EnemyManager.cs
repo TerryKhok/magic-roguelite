@@ -34,9 +34,13 @@ public class EnemyManager : MonoBehaviour
     private float minRange;     //プレイヤに近づくと止まるための範囲
     private bool inRange = false;       //敵はプレイヤーの範囲にいるフラグ
 
+    //ドロップアイテム
+    DropItemEnemy _drop;
+
     void Start()
     {
         Target = FindObjectOfType<PlayerMovement>().transform;
+        _drop = GetComponent<DropItemEnemy>();
     }
 
     void Update()
@@ -170,6 +174,7 @@ public class EnemyManager : MonoBehaviour
 
     void EnemyDeath()
     {
+        _drop.ItemDrop();
         Destroy(gameObject);
     }
 }
