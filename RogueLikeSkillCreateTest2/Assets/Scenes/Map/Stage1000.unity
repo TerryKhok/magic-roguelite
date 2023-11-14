@@ -1930,10 +1930,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1631401083}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bf60db3636dbe7478bd8832a4422826, type: 3}
+  m_Script: {fileID: 11500000, guid: cc64de4cbf770c94aa319a5f2d2bcf5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _progressIdList: 0100000003000000
+  _progressIdList: 0100000002000000
+  _partsDataList:
+  - {fileID: 11400000, guid: d51afbd00bdee0045962831462d3da02, type: 2}
+  - {fileID: 11400000, guid: 3d4a0bdff784494408d3bd1b3bd4616c, type: 2}
 --- !u!1 &1734058647
 GameObject:
   m_ObjectHideFlags: 0
