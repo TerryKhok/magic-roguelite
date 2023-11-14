@@ -7,48 +7,64 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEditor;
 
-public class MechanicsDamage : SkillProgress, ISkillProgress
+public class MechanicsDamage : SkillProgress
 {
     public MechanicsDamage(int t) : base(t)
     {
         Debug.Log($"[Generated] MechanicsDamage: {t}");
     }
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
+
+    public override void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
 
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
-    {
         ProgressId id = ProgressId.MechanicsDamage;
         int dmg = SkillDB.GetSkillVariableValue(id, 0, GetTier());
-        token.ThrowIfCancellationRequested();
-        elem.GetTargets().ForEach(t => { Object.Destroy(t); });
+
+        SkillAttributes attr = elem.GetAttr();
+        if (attr.IsExist("AttackInc"))
+        {
+            dmg = (int)(dmg * attr.GetCorrection("AttackInc").GetMulti());
+            dmg = (int)(dmg + attr.GetCorrection("AttackInc").GetFixedValue());
+        }
+
+        elem.GetTargets().ForEach(t =>
+        {
+            if (elem.IsTarget(t))
+            {
+                if (elem.IsPlayer())
+                {
+                    //t.GetComponent<EnemyManager>().EnemyTakeDamage(dmg);
+                }
+                else
+                {
+                    t.GetComponent<PlayerMovement>().PlayerTakeDamage(dmg);
+                }
+            }
+        });
     }
 }
 
-public class MechanicsGenerateCube : SkillProgress, ISkillProgress
+public class MechanicsGenerateCube : SkillProgress
 {
     public MechanicsGenerateCube(int t) : base(t)
     {
         Debug.Log($"[Generated] MechanicsGenerateCube: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
-
-    async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override async void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
         ProgressId id = ProgressId.MechanicsGenerateCube;
         int lifeTime = SkillDB.GetSkillVariableValue(id, 0, GetTier());
+
+        SkillAttributes attr = elem.GetAttr();
+        if (attr.IsExist("RangeInc"))
+        {
+            lifeTime = (int)(lifeTime * attr.GetCorrection("RangeInc").GetMulti());
+            lifeTime = (int)(lifeTime + attr.GetCorrection("RangeInc").GetFixedValue());
+        }
 
         GameObject resource = Resources.Load("SkillSystem/SkillSystem_Mechanics_GenerateCube_Stub") as GameObject;
         GameObject cube = Object.Instantiate(resource, elem.GetLocationData().GetPos(), elem.GetLocationData().GetRotate());
@@ -56,4 +72,3 @@ public class MechanicsGenerateCube : SkillProgress, ISkillProgress
         Object.Destroy(cube);
     }
 }
-

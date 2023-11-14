@@ -1,6 +1,6 @@
 ﻿処理ノードID,変数１の名称,変数１の値,変数２の名称,変数２の値
-TargetBall,速度,5|7|9,持続時間(ミリ秒),1000|1500|2000
+TargetBall,速度,10|14|18,持続時間(ミリ秒),1000|1500|2000
 MechanicsDamage,ダメージ,10|20|30,,
-MechanicsGenerateCube,持続時間(ミリ秒),2000|4000|6000,,
-SystemLoopStart,ループ回数,2|3|4,ディレイ,1000|1000|1000
-SystemWayStart,方向,3|5|7,角度,45|60|75
+MechanicsGenerateCube,持続時間(ミリ秒),400|400|400,,
+SystemLoopStart,ループ回数,2|3|4,ディレイ,200|200|200
+SystemWayStart,方向,2|3|4,角度,45|60|75

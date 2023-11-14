@@ -8,21 +8,14 @@ using UnityEngine;
 
 
 //遅延ありループ処理の開始ノード
-public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
+public class SystemLoopStart : SkillLoopStartProgress
 {
     public SystemLoopStart(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemLoopStart: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
-
-    async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override async void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
         ProgressId id = ProgressId.SystemLoopStart;
@@ -33,12 +26,12 @@ public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
             SkillElements elemPrev = elem;
             UniTask.Create(async () =>
             {
-                foreach (ISkillProgress progress in _loopProgressList)
+                foreach (SkillProgress progress in _loopProgressList)
                 {
                     try
                     {
-                        progress.SkillProgressNoWait(elem, token);
-                        elem = await progress.SkillProgress(elem, token);
+                        progress.RunProgressNoWait(elem, token);
+                        elem = await progress.RunProgress(elem, token);
                     }
                     catch (OperationCanceledException e)
                     {
@@ -51,57 +44,37 @@ public class SystemLoopStart : SkillProgress, ISkillLoopStartProgress
         }
     }
 
-    List<ISkillProgress> _loopProgressList = new List<ISkillProgress>();
-    public void AddLoopProgressList(ISkillProgress progress)
+    List<SkillProgress> _loopProgressList = new List<SkillProgress>();
+    public override void AddLoopProgressList(SkillProgress progress)
     {
         _loopProgressList.Add(progress);
     }
 
-    public Type GetLoopEndProgressType()
+    public override Type GetLoopEndProgressType()
     {
         return typeof(SystemLoopEnd);
     }
 }
 
 //遅延ありループ処理の終了ノード
-public class SystemLoopEnd : SkillProgress, ISkillProgress
+public class SystemLoopEnd : SkillProgress
 {
-
     public SystemLoopEnd(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemLoopEnd: {t}");
-    }
-
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
-
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
     }
 }
 
 
 //複数方向ループ処理の開始ノード
-public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
+public class SystemWayStart : SkillLoopStartProgress
 {
     public SystemWayStart(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemWayStart: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
-
-    async void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
+    public override async void RunProgressNoWait(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
@@ -116,12 +89,12 @@ public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
             elem.SetLocationData(ld.GetPos(), Quaternion.Euler(ld.GetRotate().eulerAngles + new Vector3(0, 0, (angleBetween / 2 * (way - 1) * -1) + (angleBetween * i))));
             UniTask.Create(async () =>
             {
-                foreach (ISkillProgress progress in _wayProgressList)
+                foreach (SkillProgress progress in _wayProgressList)
                 {
                     try
                     {
-                        progress.SkillProgressNoWait(elem, token);
-                        elem = await progress.SkillProgress(elem, token);
+                        progress.RunProgressNoWait(elem, token);
+                        elem = await progress.RunProgress(elem, token);
                     }
                     catch (OperationCanceledException e)
                     {
@@ -135,36 +108,23 @@ public class SystemWayStart : SkillProgress, ISkillLoopStartProgress
     }
 
 
-    List<ISkillProgress> _wayProgressList = new List<ISkillProgress>();
-    public void AddLoopProgressList(ISkillProgress progress)
+    List<SkillProgress> _wayProgressList = new List<SkillProgress>();
+    public override void AddLoopProgressList(SkillProgress progress)
     {
         _wayProgressList.Add(progress);
     }
 
-    public Type GetLoopEndProgressType()
+    public override Type GetLoopEndProgressType()
     {
         return typeof(SystemWayEnd);
     }
 }
 
 //複数方向ループ処理の終了ノード
-public class SystemWayEnd : SkillProgress, ISkillProgress
+public class SystemWayEnd : SkillProgress
 {
     public SystemWayEnd(int t) : base(t)
     {
         Debug.Log($"[Generated] SystemWayEnd: {t}");
-    }
-
-
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
-        await UniTask.Delay(0);
-        return elem;
-    }
-
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
     }
 }

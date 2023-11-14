@@ -10,20 +10,34 @@ using UnityEditor;
 
 
 
-public class TargetBall : SkillProgress, ISkillProgress
+public class TargetBall : SkillProgress
 {
     public TargetBall(int t) : base(t)
     {
         Debug.Log($"[Generated] TargetBall: {t}");
     }
 
-    async UniTask<SkillElements> ISkillProgress.SkillProgress(SkillElements elem, CancellationToken token)
+    public override async UniTask<SkillElements> RunProgress(SkillElements elem, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
         ProgressId id = ProgressId.TargetBall;
         int speed = SkillDB.GetSkillVariableValue(id, 0, GetTier());
         int lifeTime = SkillDB.GetSkillVariableValue(id, 1, GetTier());
+
+        SkillAttributes attr = elem.GetAttr();
+        if (attr.IsExist("SpeedInc"))
+        {
+            Debug.Log("speed " + attr.GetCorrection("SpeedInc").GetMulti() + " / " + attr.GetCorrection("SpeedInc").GetFixedValue());
+            speed = (int)(speed * attr.GetCorrection("SpeedInc").GetMulti());
+            speed = (int)(speed + attr.GetCorrection("SpeedInc").GetFixedValue() * 2);
+        }
+        if (attr.IsExist("RangeInc"))
+        {
+            Debug.Log("range " + attr.GetCorrection("RangeInc").GetMulti() + " / " + attr.GetCorrection("RangeInc").GetFixedValue());
+            lifeTime = (int)(lifeTime * attr.GetCorrection("RangeInc").GetMulti());
+            lifeTime = (int)(lifeTime + attr.GetCorrection("RangeInc").GetFixedValue() * 200);
+        }
 
         GameObject obj = Object.Instantiate(Resources.Load("SkillSystem/SkillSystem_Target_Ball_Stub") as GameObject);
         Transform objtf = obj.transform;
@@ -41,7 +55,7 @@ public class TargetBall : SkillProgress, ISkillProgress
         {
             GameObject hit = awaiter.result.gameObject;
 
-            if (hit.gameObject.CompareTag("Enemy"))
+            if (elem.IsTarget(hit.gameObject))
             {
                 elem.AddTargets(hit.gameObject);
             }
@@ -51,10 +65,5 @@ public class TargetBall : SkillProgress, ISkillProgress
         Object.Destroy(obj);
 
         return elem;
-    }
-
-    void ISkillProgress.SkillProgressNoWait(SkillElements elem, CancellationToken token)
-    {
-        token.ThrowIfCancellationRequested();
     }
 }
