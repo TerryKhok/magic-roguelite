@@ -5,6 +5,6 @@ using SkillSystem;
 
 public class SkillSystemFunctions
 {
-    List<ProgressId> m_progressIds = new() { ProgressId.TargetBall, ProgressId.MechanicsDamage };
-    List<SkillProgress> m_mechanicsAttackFunction = new();
+    List<ProgressId> _progressIds = new() { ProgressId.TargetBall, ProgressId.MechanicsDamage };
+    List<SkillProgress> _mechanicsAttackFunction = new();
 }

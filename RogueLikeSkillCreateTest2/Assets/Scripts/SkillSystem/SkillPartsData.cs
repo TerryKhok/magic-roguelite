@@ -10,34 +10,34 @@ public class SkillPartsData : ScriptableObject
 {
     [Header("’Ç‰ÁŒø‰Ê‚ÌID")]
     [SerializeField]
-    SkillPartsId m_id;
+    SkillPartsId _id;
 
     [Header("’Ç‰ÁŒø‰Ê‚Ì—Ê")]
     [SerializeField]
-    SkillCorrection m_cor;
+    SkillCorrection _cor;
 
     public SkillPartsData()
     {
-        m_id = 0;
-        m_cor = new SkillCorrection(0, 1);
+        _id = 0;
+        _cor = new SkillCorrection(0, 1);
 
     }
 
-    public SkillPartsId GetId() { return m_id; }
-    public SkillCorrection GetCor() { return m_cor; }
+    public SkillPartsId GetId() { return _id; }
+    public SkillCorrection GetCor() { return _cor; }
     public void GenerateRandomData()
     {
-        m_id = (SkillPartsId)Random.Range(0, Enum.GetValues(typeof(SkillPartsId)).Length);
-        string name = Enum.GetName(typeof(SkillPartsId), m_id);
+        _id = (SkillPartsId)Random.Range(0, Enum.GetValues(typeof(SkillPartsId)).Length);
+        string name = Enum.GetName(typeof(SkillPartsId), _id);
         if (name.Contains("Inc"))
         {
             if (Random.Range(0, 5) < 2)
             {
-                m_cor.AddMulti(Random.Range(1, 3));
+                _cor.AddMulti(Random.Range(1, 3));
             }
             else
             {
-                m_cor.AddFixed(Random.Range(1, 3));
+                _cor.AddFixed(Random.Range(1, 3));
             }
         }
     }
