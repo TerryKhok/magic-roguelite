@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 176233860ee30b84797bfaa9de5d72aa, type: 3}
   m_Name: DataBase
   m_EditorClassIdentifier: 
-  g_itemDatabase: []
-  g_enemyDatabase: []
+  g_itemDatabase:
+  - {fileID: 11400000, guid: 196a59c5cf94be744afea5ff96a3de35, type: 2}
+  - {fileID: 11400000, guid: a842a64437a071d43b36b8add8315f40, type: 2}
+  - {fileID: 11400000, guid: 2a0c6d5bdec57a74f994cac1663ca8f5, type: 2}
+  g_enemyDatabase:
+  - {fileID: 11400000, guid: 670634520d48a7648b48d524ed9a6224, type: 2}
+  - {fileID: 11400000, guid: 6bb371ff998aa334082f1e0ceb5495a1, type: 2}
