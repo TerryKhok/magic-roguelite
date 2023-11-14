@@ -2,31 +2,33 @@ using UnityEngine;
 
 public class Droptest : MonoBehaviour
 {
-    [SerializeField] GameObject enemy;
-    private DropItemEnemy drop;
-    private Renderer rend;
-    bool deth = false;
+    [SerializeField] GameObject _enemy;
+    private DropItemEnemy _drop;
+    private Renderer _rend;
+    bool _deth = false;
+    string _enemyName;
 
     // Start is called before the first frame update
     void Start()
     {
-        drop = enemy.GetComponent<DropItemEnemy>();
-        rend = enemy.GetComponent<Renderer>();
+        _drop = _enemy.GetComponent<DropItemEnemy>();
+        _rend = _enemy.GetComponent<Renderer>();
+        _enemyName = _drop.getEnemydata().getEnemyName();
     }
 
    public void Action()
     {
-        if(!deth)
+        if(!_deth)
         {
-            Debug.Log(name + "‚ð“|‚µ‚½");
-           rend.material.color = Color.black;
-            drop.ItemDrop();
+            Debug.Log(_enemyName + "‚ð“|‚µ‚½");
+           _rend.material.color = Color.black;
+            _drop.ItemDrop();
         }
         else
         {
-            rend.material.color = Color.red;
+            _rend.material.color = Color.red;
         }
 
-        deth = !deth;
+        _deth = !_deth;
     }
 }

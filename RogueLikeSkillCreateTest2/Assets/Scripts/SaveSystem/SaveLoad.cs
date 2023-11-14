@@ -2,16 +2,17 @@ using UnityEngine;
 
 public class SaveLoad : MonoBehaviour
 {
-    public Main main;
+    Main _main;
 
     public void Save()
     {
-        main.Save();
+        _main = GameObject.Find("Main").GetComponent<Main>();
+        _main.Save();
     }
 
     public void Load()
     {
-        main.Load(SaveSystem.LoadGame());
-        main.LoadUpdateInventoryUI();
+        _main.Load(SaveSystem.LoadGame());
+        _main.LoadUpdateInventoryUI();
     }
 }

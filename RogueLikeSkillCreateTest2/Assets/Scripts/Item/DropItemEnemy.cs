@@ -6,38 +6,47 @@ using System.Linq;
 public class DropItemEnemy : MonoBehaviour
 {
     [SerializeField]
-    private EnemyData enemyData;
+    private EnemyData _enemyData;
 
-    private GameObject main;
+    private GameObject _main;
 
-    private List<DropTable> droplist;
+    private List<DropTable> _droplist;
 
-    private Main maindata;
+    private Main _maindata;
 
     void Start()
     {
-        main = GameObject.Find("Main");
-        droplist = enemyData.getDropList();
-        maindata = main.GetComponent<Main>();
+        _main = GameObject.Find("Main");
+        _droplist = _enemyData.getDropList();
+        _maindata = _main.GetComponent<Main>();
 
+        //単体ドロップ
+        /*
         if (droplist != null)
         //listのドロップ割合の降順に並び変える
         droplist = droplist.OrderByDescending(i => i.dropratio).ToList();
+        */
+        
     }
 
     public void ItemDrop()
     {
-       foreach(DropTable dropdata in droplist)
+       foreach(DropTable dropdata in _droplist)
         {
-            int rand = Random.Range(0, 100);
-            if(rand < dropdata.dropratio)
+            int rand = Random.Range(0, 1000);
+            if(rand < dropdata.g_dropratio)
             {
-                Item item = new Item(dropdata.itemdata, dropdata.dropamount);
-                maindata.GetItem(item);
+                Item item = new Item(dropdata.g_itemdata, dropdata.g_dropamount);
+                _maindata.GetItem(item);
 
-                Debug.Log(dropdata.itemdata.getItemName()  + "がドロップしました");
-                return;
+                Debug.Log(dropdata.g_itemdata.getItemName()  + "がドロップしました");
+                //return;
             }
         }
+    }
+
+    public EnemyData getEnemydata()
+    {
+        return _enemyData;
     }
 }

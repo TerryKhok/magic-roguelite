@@ -3,24 +3,24 @@ using System;
 
 public class Inventory
 {
-    public List<Item> itemList = new List<Item>();
+    public List<Item> g_itemList = new List<Item>();
 
-    Main main;
+    Main _main;
 
     public Inventory(Main _main)
     {
-        main = _main;
+        this._main = _main;
     }
 
     public Inventory(Main _main,SaveDataOfInventory saveData,DataBase database)
     {
-        main = _main;
+        this._main = _main;
 
-        itemList = new List<Item>();
+        g_itemList = new List<Item>();
         //セーブデータからインベントリクラスのの復元
         foreach (SaveDataOfItem itemSaveData in saveData.itemArray)
         {
-            itemList.Add(new Item(itemSaveData, database));
+            g_itemList.Add(new Item(itemSaveData, database));
         }
     }
 }
@@ -35,11 +35,11 @@ public class SaveDataOfInventory
     public SaveDataOfInventory(Inventory inventory,DataBase database)
     {
         //持っているアイテムの数データを配列に保存する
-        itemArray = new SaveDataOfItem[inventory.itemList.Count];
+        itemArray = new SaveDataOfItem[inventory.g_itemList.Count];
         for(int i = 0;i < itemArray.Length;i++)
         {
             //アイテムを一個づつ保存する
-            itemArray[i] = new SaveDataOfItem(inventory.itemList[i], database);
+            itemArray[i] = new SaveDataOfItem(inventory.g_itemList[i], database);
         }
     }
 }

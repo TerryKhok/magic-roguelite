@@ -11,23 +11,23 @@ public class ItemData : ScriptableObject
 
     [Header("アイテムの名前")]
     [SerializeField]
-    private string Itemname;
+    private string _Itemname;
 
     [Header("アイテムのタイプ")]
     [SerializeField]
-    private itemtype Itemtype; 
+    private itemtype _Itemtype; 
 
     [Header("アイテムのアイコン")]
     [SerializeField]
-    private Sprite Itemicon; 
+    private Sprite _Itemicon; 
 
     [Header("アイテムの説明")]
     [SerializeField]
-    private string Itemexplanation; 
+    private string _Itemexplanation; 
 
     public string getItemName()
     {
-        return Itemname;
+        return _Itemname;
     }
 
 }
@@ -35,27 +35,27 @@ public class ItemData : ScriptableObject
 [Serializable]
 public class Item
 {
-    public ItemData data;
-    public int value;
+    public ItemData g_data;
+    public int g_value;
 
     public Item(ItemData _data,int _value)
     {
-        data = _data;
-        value = _value;
+        g_data = _data;
+        g_value = _value;
     }
 
     public Item(Item _item)
     {
-        data = _item.data;
-        value = _item.value;
+        g_data = _item.g_data;
+        g_value = _item.g_value;
     }
 
     //セーブデータからItemクラスを復元
     public Item(SaveDataOfItem saveData,DataBase database)
     {
         //セーブデータのIDをデータベースで参照して代入
-        data = database.itemDatabase[saveData.ID];
-        value = saveData.value;
+        g_data = database.g_itemDatabase[saveData.g_ID];
+        g_value = saveData.g_value;
     }
 }
 
@@ -63,14 +63,14 @@ public class Item
 [Serializable]
 public class SaveDataOfItem
 {
-    public int ID;
-    public int value;
+    public int g_ID;
+    public int g_value;
 
     public SaveDataOfItem(Item item,DataBase database)
     {
         //データベース上のID(index)に変換する
-        ID = database.GetItemID(item.data);
-        value = item.value;
+        g_ID = database.GetItemID(item.g_data);
+        g_value = item.g_value;
     }
 }
 

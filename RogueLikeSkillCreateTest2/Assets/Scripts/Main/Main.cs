@@ -5,32 +5,32 @@ using UnityEngine;
 public class SaveData
 {
     //持っているアイテム
-    public SaveDataOfInventory saveDataOfInventory;
+    public SaveDataOfInventory g_saveDataOfInventory;
 
     //コンストラクタ
     public SaveData(Main main,DataBase database)
     {
         //持っているアイテム
-        saveDataOfInventory = new SaveDataOfInventory(main.inventory, main.database);
+        g_saveDataOfInventory = new SaveDataOfInventory(main.g_inventory, main.g_database);
     }
 }
 
 public class Main : MonoBehaviour
 {
-    public DataBase database;
-    public Inventory inventory { get; private set; }
-    private InventoryUI inventoryUI;
+    public DataBase g_database;
+    public Inventory g_inventory { get; private set; }
+    private InventoryUI _inventoryUI;
 
     void Start()
     {
-        inventory = new Inventory(this);
-        inventoryUI = GetComponent<InventoryUI>();
+        g_inventory = new Inventory(this);
+        _inventoryUI = GetComponent<InventoryUI>();
     }
 
     public void Save()
     {
         //新しいセーブデータの作成
-        SaveData newSaveData = new SaveData(this, database);
+        SaveData newSaveData = new SaveData(this, g_database);
 
         SaveSystem.SaveGame(newSaveData);
 
@@ -38,32 +38,32 @@ public class Main : MonoBehaviour
     public void Load(SaveData saveData)
     {
         //Inventoryクラスのロード
-        inventory = new Inventory(this, saveData.saveDataOfInventory, database);
+        g_inventory = new Inventory(this, saveData.g_saveDataOfInventory, g_database);
     }
 
     public void GetItem(Item item)
     {
-        string itemname = item.data.getItemName();
-        List<Item> _itemList = inventory.itemList;
+        string itemname = item.g_data.getItemName();
+        List<Item> _itemList = g_inventory.g_itemList;
 
         for (int i = 0;i < _itemList.Count;i++)
         {
             //ゲットしたアイテムがインベントリにあるかチェック
-            if(itemname == _itemList[i].data.getItemName())
+            if(itemname == _itemList[i].g_data.getItemName())
             {
-                inventory.itemList[i].value += item.value;
-                inventoryUI.UpdateUI(inventory);
+                g_inventory.g_itemList[i].g_value += item.g_value;
+                _inventoryUI.UpdateUI(g_inventory);
                 return;
             }
         }
 
-        inventory.itemList.Add(item);
-        inventoryUI.UpdateUI(inventory);
+        g_inventory.g_itemList.Add(item);
+        _inventoryUI.UpdateUI(g_inventory);
     }
 
     public void LoadUpdateInventoryUI()
     {
-        inventoryUI.UpdateUI(inventory);
+        _inventoryUI.UpdateUI(g_inventory);
     }
 }
 

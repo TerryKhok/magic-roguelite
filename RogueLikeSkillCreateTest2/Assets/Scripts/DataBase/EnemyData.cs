@@ -8,29 +8,34 @@ public class EnemyData : ScriptableObject
     public class DropTable
     {
         [Header("アイテムのデータ")]
-        public ItemData itemdata;
+        public ItemData g_itemdata;
 
         [Header("ドロップ量")]
-        public int dropamount;
+        public int g_dropamount;
 
-        [Header("確率(0～100)")]
-        public int dropratio;
+        [Header("確率(0～1000)")]
+        public int g_dropratio;
     }
 
     [Header("敵の名前")]
     [SerializeField]
-    private string enemyname;
+    private string _enemyname;
 
     [Header("ドロップするアイテム")]
     [SerializeField] 
-    private List<DropTable> droplist = new List<DropTable>();
+    private List<DropTable> _droplist = new List<DropTable>();
 
     [Header("敵のアイコン")]
     [SerializeField]
-    private Sprite Enemyicon; 
+    private Sprite _Enemyicon; 
+
+    public string getEnemyName()
+    {
+        return _enemyname;
+    }
 
   public List<DropTable> getDropList()
     {
-        return droplist;
+        return _droplist;
     }
 }
