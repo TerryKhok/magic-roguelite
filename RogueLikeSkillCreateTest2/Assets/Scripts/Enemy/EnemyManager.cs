@@ -170,6 +170,6 @@ public class EnemyManager : MonoBehaviour
 
     void EnemyDeath()
     {
-
+        Destroy(gameObject);
     }
 }
